@@ -1,0 +1,27 @@
+project:
+  type: website
+  
+execute:
+  freeze: auto
+
+website:
+  title: "BHHI Data Science Salon"
+
+format:
+  bhhi-quarto-html:
+    code-tools:
+      source: false
+  revealjs:
+    theme: [default, theme.scss]
+    date-format: long
+    logo: bhhi-logo.png
+    code-overflow: wrap
+    code-line-numbers: false
+    highlight-style: a11y
+    knitr:
+      opts_chunk:
+        dev: ragg_png
+        dpi: 144
+
+
+

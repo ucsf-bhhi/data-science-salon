@@ -1,0 +1,71 @@
+/*-- scss:defaults --*/
+
+// Fonts
+
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap");
+
+$font-family-sans-serif: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+
+$font-family-monospace: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+
+// Colors
+
+$primary: #052049 !default;
+$navbar-fg: #E2F4FC !default;
+$code-bg: #E2F4FC !default;
+$toc-active-border: #052049 !default;
+$toc-inactive-border: #E2F4FC!default;
+$headings-color: #052049 !default;
+
+/*-- scss:rules --*/
+
+  // Title Block
+
+h1.title {
+  color: $navbar-fg;
+}
+
+.quarto-title-banner .code-tools-button {
+  color: $navbar-fg;
+  text-transform: none;
+}
+
+.quarto-title-banner .code-tools-button:not(.disabled):hover {
+  border-bottom-width: 4px;
+}
+
+.quarto-title-block .quarto-title-banner {
+  background-image: none;
+}
+/*
+[screen-start] 1.5em [screen-start-inset] 5fr [page-start] 35px [page-start-inset] minmax(0px, 175px) [body-start-outset] 35px [body-start] 1.5em [body-content-start] minmax(450px, calc( 800px - 3em )) [body-content-end] 1.5em [body-end] 50px [body-end-outset] minmax(0px, 200px) [page-end-inset] 50px [page-end] 5fr [screen-end-inset] 1.5em [screen-end];
+}*/
+@include media-breakpoint-up(md) {
+  .quarto-title-block .quarto-title-banner {
+    background-image: url(_extensions/ucsf-bhhi/bhhi-quarto/bhhi-logo.png);
+    background-size: 70px;
+    background-position-x: 1.5em;
+    background-position-y: 50%;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .quarto-title-block .quarto-title-banner {
+    background-size: 85px;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .quarto-title-block .quarto-title-banner {
+    background-size: 100px;
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .quarto-title-block .quarto-title-banner {
+    background-size: 115px;
+    background-position-x: calc(calc(1vw - 14px) * 50 + 1.5em);
+  }
+}
