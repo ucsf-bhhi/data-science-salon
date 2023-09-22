@@ -1,0 +1,99 @@
+---
+title: "Intro to R"
+subtitle: "Data Science Salon - Session 1"
+author: "Eve Perry"
+date: today
+format: revealjs
+---
+
+## Outline
+
+* Preview of workshops
+* R workflow
+* Differences between R and Stata/SAS
+* Data viz demo
+
+# Preview of Workshops
+
+## Planned Workshops
+
+* R Basics
+* "Tidy" Data
+* Data Wrangling in R
+* Visualizing Data in R
+* Communicating with R
+* Modeling with R
+* Programming with R
+
+# R Workflow
+
+## Whole Game
+
+![Data Science Workflow in R (via [Hadley Wickham](https://r4ds.hadley.nz/whole-game))](https://r4ds.hadley.nz/diagrams/data-science/whole-game.png)
+
+## Import
+### Reading in flat files
+
+```r
+read_csv("example.csv")
+read_dta("example.dta")
+```
+
+### Connect directly to SQL databases
+```r
+con <- DBI::dbConnect(RMariaDB::MariaDB(), group = "my-db")
+tbl(con, "example")
+```
+
+### Fetch data from APIs
+```r
+bhhi_rc_read("EXAMPLE")
+```
+
+## Tidy
+### Making messy data neat, so you can use it
+
+:::: columns
+::: column
+![Raw Data in Spreadsheet](img/raw-data-spreadsheet.png)
+:::
+
+::: column
+![Tidied Data in R](img/raw-data-spreadsheet.png)
+:::
+::::
+
+## Transform
+### Filtering and sorting rows
+```r
+take_home_data |>
+  filter(region == "West") |>
+  arrange(peh_count)
+```
+
+### Adding, changing, and selecting columns
+```r
+take_home_data |>
+  mutate(
+    homelessness_rate = peh_count / population,
+    homelessness_rate = homelessness_rate * 100
+  ) |>
+  select(city, homelessness_rate, average_rent)
+```
+
+## Visualize
+
+
+## Model
+
+
+## Communicate
+
+
+## Tidy
+
+
+# Differences Between R & Stata/SAS
+
+# Data Viz Demo
+
