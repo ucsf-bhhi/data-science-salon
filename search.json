@@ -1,9 +1,114 @@
 [
   {
+    "objectID": "01-intro-to-r/index.html#outline",
+    "href": "01-intro-to-r/index.html#outline",
+    "title": "Intro to R",
+    "section": "Outline",
+    "text": "Outline\n\nPreview of workshops\nR workflow\nDifferences between R and Stata"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#planned-workshops",
+    "href": "01-intro-to-r/index.html#planned-workshops",
+    "title": "Intro to R",
+    "section": "Planned Workshops",
+    "text": "Planned Workshops\n\nR Basics\n“Tidy” Data\nData Wrangling in R\nVisualizing Data in R\nCommunicating with R\nModeling with R\nProgramming with R"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#whole-game",
+    "href": "01-intro-to-r/index.html#whole-game",
+    "title": "Intro to R",
+    "section": "Whole Game",
+    "text": "Whole Game\n\nData Science Workflow in R (via Hadley Wickham)"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#import",
+    "href": "01-intro-to-r/index.html#import",
+    "title": "Intro to R",
+    "section": "Import",
+    "text": "Import\nReading in flat files\nread_csv(\"example.csv\")\nread_dta(\"example.dta\")\nConnect directly to SQL databases\ncon &lt;- DBI::dbConnect(RMariaDB::MariaDB(), group = \"my-db\")\ntbl(con, \"example\")\nFetch data from APIs\nbhhi_rc_read(\"EXAMPLE\")"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#tidy",
+    "href": "01-intro-to-r/index.html#tidy",
+    "title": "Intro to R",
+    "section": "Tidy",
+    "text": "Tidy\nMaking messy data neat, so you can use it\n\n\n\n\n\nRaw Data in Spreadsheet\n\n\n\n\n\n\nTidied Data in R"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#transform",
+    "href": "01-intro-to-r/index.html#transform",
+    "title": "Intro to R",
+    "section": "Transform",
+    "text": "Transform\nFiltering and sorting rows\ntake_home_data |&gt;\n  filter(region == \"West\") |&gt;\n  arrange(peh_count)\nAdding, changing, and selecting columns\ntake_home_data |&gt;\n  mutate(\n    homelessness_rate = peh_count / population,\n    homelessness_rate = homelessness_rate * 100\n  ) |&gt;\n  select(city, homelessness_rate, average_rent)"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#visualize",
+    "href": "01-intro-to-r/index.html#visualize",
+    "title": "Intro to R",
+    "section": "Visualize",
+    "text": "Visualize"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#model",
+    "href": "01-intro-to-r/index.html#model",
+    "title": "Intro to R",
+    "section": "Model",
+    "text": "Model\n\nAll the standard regression models and diagnostics\nCutting edge survey data modeling\nEasy to use machine learning tools"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#communicate",
+    "href": "01-intro-to-r/index.html#communicate",
+    "title": "Intro to R",
+    "section": "Communicate",
+    "text": "Communicate\n\n\n\n\n\nWebpage\n\n\n\n\n\nWeb Presentations\n\n\n\n\n\n\nPDF\n\n\n\n\n\nPowerpoint\n\n\n\n\n\n\nWord Documents\n\n\n\n\n\nGoogle Drive"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#datasets-vs.-objects",
+    "href": "01-intro-to-r/index.html#datasets-vs.-objects",
+    "title": "Intro to R",
+    "section": "Datasets vs. Objects",
+    "text": "Datasets vs. Objects\n\n\nStata\n\n\nR"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#commands-vs.-functions",
+    "href": "01-intro-to-r/index.html#commands-vs.-functions",
+    "title": "Intro to R",
+    "section": "Commands vs. Functions",
+    "text": "Commands vs. Functions\nStata\nsysuse auto\ngen test = 1\nreplace mpg = 90\n\nsum test mpg\n    Variable |        Obs        Mean    Std. dev.       Min        Max\n-------------+---------------------------------------------------------\n        test |         74           1           0          1          1\n         mpg |         74          90           0         90         90"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#commands-vs.-functions-1",
+    "href": "01-intro-to-r/index.html#commands-vs.-functions-1",
+    "title": "Intro to R",
+    "section": "Commands vs. Functions",
+    "text": "Commands vs. Functions\nR\n\nmutate(cars, test = 1, mpg = 90)\n\n# A tibble: 32 × 12\n    mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb  test\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1    90     6   160   110  3.9   2.62  16.5     0     1     4     4     1\n2    90     6   160   110  3.9   2.88  17.0     0     1     4     4     1\n3    90     4   108    93  3.85  2.32  18.6     1     1     4     1     1\n4    90     6   258   110  3.08  3.22  19.4     1     0     3     1     1\n5    90     8   360   175  3.15  3.44  17.0     0     0     3     2     1\n# ℹ 27 more rows\n\n\n\ncars\n\n# A tibble: 32 × 11\n    mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1  21       6   160   110  3.9   2.62  16.5     0     1     4     4\n2  21       6   160   110  3.9   2.88  17.0     0     1     4     4\n3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1\n4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1\n5  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2\n# ℹ 27 more rows"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#commands-vs.-functions-2",
+    "href": "01-intro-to-r/index.html#commands-vs.-functions-2",
+    "title": "Intro to R",
+    "section": "Commands vs. Functions",
+    "text": "Commands vs. Functions\nR\n\ncars = mutate(cars, test = 1, mpg = 90)\ncars\n\n# A tibble: 32 × 12\n    mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb  test\n  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1    90     6   160   110  3.9   2.62  16.5     0     1     4     4     1\n2    90     6   160   110  3.9   2.88  17.0     0     1     4     4     1\n3    90     4   108    93  3.85  2.32  18.6     1     1     4     1     1\n4    90     6   258   110  3.08  3.22  19.4     1     0     3     1     1\n5    90     8   360   175  3.15  3.44  17.0     0     0     3     2     1\n# ℹ 27 more rows"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#packages",
+    "href": "01-intro-to-r/index.html#packages",
+    "title": "Intro to R",
+    "section": "Packages",
+    "text": "Packages\n\n\nStata\nssc install outreg\n\nR\ninstall.packages(\"dplyr\")\nlibrary(dplyr)"
+  },
+  {
+    "objectID": "01-intro-to-r/index.html#r-resources-for-stata-users",
+    "href": "01-intro-to-r/index.html#r-resources-for-stata-users",
+    "title": "Intro to R",
+    "section": "R Resources for Stata Users",
+    "text": "R Resources for Stata Users\n\nStata to R Cheatsheet, Posit (formerly RStudio)\nR and Stata Equivalencies, Charles Lanfear\nR for Stata Users, Matthieu Gomez"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Data Science Salon",
     "section": "",
-    "text": "No matching items"
+    "text": "Intro to R\n\n\nData Science Salon - Session 1\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nEve Perry\n\n\n\n\n\n\nNo matching items"
   }
 ]

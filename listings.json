@@ -1,6 +1,8 @@
 [
   {
     "listing": "/index.html",
-    "items": []
+    "items": [
+      "/01-intro-to-r/index.html"
+    ]
   }
 ]
