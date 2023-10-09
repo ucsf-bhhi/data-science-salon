@@ -1,0 +1,172 @@
+---
+title: "R Basics"
+subtitle: "Data Science Salon - Session 2"
+author: "Sara Colom"
+date: today
+format: revealjs
+---
+
+## Outline
+
+* Coding basics
+* Calling functions
+* Data types
+* Interacting with data (data transformation basics)
+
+Chapter 3: Workflow basics  
+Chapter 4: Interacting with Data
+
+![R for Data Science (via [Hadley Wickham](https://r4ds.had.co.nz/))](https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png)
+
+## Coding basics
+
+  * R can be used to do basic math calculations
+    * Basic arithmetic on vectors is applied to every element of the vector.
+  * In R, new objects can be created with the assignment operator `<-` 
+    * RStudio’s keyboard shortcut: Alt + - (the minus sign) to save time.
+    * _Note_ the value of `x` in the example below is not printed, just stored, to view it you need to type `x` in the console
+
+## Examples: Basic math and operations on a vector 
+
+```r
+2 + 1
+x <- 1
+y <- c(1, 2, 3, 5)
+x + y
+```
+
+## Comments
+
+Comments are important and used mainly as a brief description for what the following code does.
+
+  * R will ignore text after a `#` in that line, but the text can still be read by users
+  * Some short code is self explanatory and does not require any description
+  * Best practice is to explain _why_ code was written rather explaining every single line
+    * Code will often get updated, and it can be tedious to update every single comment
+
+```r
+# Create a vector of even numbers between 1 and 10
+even <- c(2, 4, 6, 8, 10)
+```
+
+## What's in the name
+
+  * Object names must start with a letter and can only contain letters, numbers, and `_` and `.`
+  * Object names should be brief and descriptive--it is best to adopt a convention for multiple words, such as `snake_case`
+    * **snake_case** is where you separate lowercase words with *_*
+  * In R objects can be overwritten over and over
+    
+```r
+# snake_case
+raw_data
+clean_data
+
+# overwrite object x
+x <- 1
+x
+x <- 2
+x
+```
+
+## What's in the name
+
+  * R is character and case sensitive, common error is when an object is not found due to a typo
+  
+## Example
+
+```r
+x <- 1
+X
+#> Error: object 'X' not found
+```
+
+## Calling functions
+
+R has a large collection of built-in functions that work like this: `function_name(argument1 = value1, arguement2 = value2, ...)`
+
+  * For example, `head` has a single arguement called `x` where it is expecting a data set as input and the output displays the first 6 rows of the input data.
+  * You can specify the input values explictley, e.g., `x = value`, or list the input(s) in the order the function expects each argument.
+  * You can learn more about what a function does by typing `?` before the function name in the console
+
+```r
+head(x = mtcars)
+head(mtcars)
+?head
+```
+
+## Data types
+
+In R there are 4 main data types:
+
+  - integer `int`
+  - character `chr`
+  - factor `fct`
+  - numeric `num`
+
+## Data types
+
+  - In R, both character and factor data types are specified in quotes, whereas integer data and numeric data are specified without quotes.
+  - Mathematical operations can only be performed on integer or numeric data.
+  - Character data is typically used to store text like features, whereas factor data is intended to have some kind of leveling structure, e.g., `Species` variable in the `iris` data
+
+## Data types
+
+  - When you read data into R, R naively tries to assign each variable a data type
+  - Unless otherwise specified, R will always assign any variable with special characters and/or text to type `chr`
+  - Evaluating the data types of your variables after reading it in can help identify potential issues with the data 
+  
+## Data types
+
+```r
+typeof(iris$Species)
+
+str(iris)
+```
+  
+
+## Data transformation
+
+Sometimes we want to make a fancy plot or a summary table of statistics, but more often than not, the data we obtain is not in the format we need it in to make these things. This is where **data transformation** or **data wrangling** becomes an important step in your data workflow.
+
+In this part of the less I will rely heavily on the `dplyr` package and provide a broad overview of what data transformation process can look like.
+
+## Getting to know your data
+
+  - `head()` : Base R, prints first 6 rows by default
+  - `glimpse()` : From `dplyr` allows you to see every column in the data frame, a subset of the values in each column, and the data type in each column. This can be helpful to diagnosis issues with the data quality.
+  
+
+## Filtering data
+
+  - `filter()` : From `dplyr` allows you to provide it a data frame and one or more conditions where cases == TRUE are retained in the output data frame.
+  - The convention in R is to specify the variable to evaluate on the left side hand of the formula and the value to include on the right hand side.
+  - There are different ways to specify a condition, it can be:
+    - Exact match or `==`
+    - Everything but this exact match `!=`
+    - In this vector of values, `%in%`
+  - _More advanced options_ 
+    - You can use `!` to include the _inverse_
+    - You can use partial string match with `str_detect()` function from `stringr` package (one of my favorites!)
+
+Solutions are endless!
+
+## Generic examples
+  
+```r
+variable == 1 # Exact match to value of 1
+variable != 1 # Everything BUT exact match to value of 1
+variable %in% c(1, 4, 5) # Value is equal to 1, 4, or 5
+!variable %in% c(1, 4, 5) # All values but 1, 4, or 5
+
+```
+
+## Sanity checks
+
+  - After ea/ data transformation step, it is best practice to provide some test that your processing worked as expected. 
+  - For instance, compare the number of rows and columns before and after filtering and/or the number of unique values of the filtered variable(s) before and after filtering.
+  
+## Changing data type
+
+## Re-coding
+
+# Ask Eve about covering merges, data binds, and reshaping data in next lecture
