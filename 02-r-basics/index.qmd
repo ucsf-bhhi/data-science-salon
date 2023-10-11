@@ -9,9 +9,8 @@ format: revealjs
 ## Outline
 
 * Coding basics
-* Calling functions
 * Data types
-* Interacting with data (data transformation basics)
+* Interacting with data (Getting started with Data)
 
 Chapter 3: Workflow basics  
 Chapter 4: Interacting with Data
@@ -44,6 +43,8 @@ Comments are important and used mainly as a brief description for what the follo
   * Best practice is to explain _why_ code was written rather explaining every single line
     * Code will often get updated, and it can be tedious to update every single comment
 
+## Comments (example)
+
 ```r
 # Create a vector of even numbers between 1 and 10
 even <- c(2, 4, 6, 8, 10)
@@ -55,6 +56,8 @@ even <- c(2, 4, 6, 8, 10)
   * Object names should be brief and descriptive--it is best to adopt a convention for multiple words, such as `snake_case`
     * **snake_case** is where you separate lowercase words with *_*
   * In R objects can be overwritten over and over
+
+## What's in the name
     
 ```r
 # snake_case
@@ -84,7 +87,7 @@ X
 
 R has a large collection of built-in functions that work like this: `function_name(argument1 = value1, arguement2 = value2, ...)`
 
-  * For example, `head` has a single arguement called `x` where it is expecting a data set as input and the output displays the first 6 rows of the input data.
+  * For example, `head` has two argument one  `x` where it is expecting a data set as input and the output displays the first 6 rows of the input data.
   * You can specify the input values explictley, e.g., `x = value`, or list the input(s) in the order the function expects each argument.
   * You can learn more about what a function does by typing `?` before the function name in the console
 
@@ -94,6 +97,26 @@ head(mtcars)
 ?head
 ```
 
+## Installing/Using packages
+
+  - You can easily install packages with the `install.packages()` function from base R--which install packages from `CRAN`
+    - There is a large body of existing packages to select from in `CRAN`
+    - _however_  developmental version of packages are often readily available and can be installed in `Git`
+    - To insall packages from `Git` you will need to use functions from the `devtools` package
+    
+## Installation example
+
+```r
+install.packages("dplyr")
+```
+
+## Loading libraries
+
+  - Libraries are not automatically loaded into your R environment (by default)
+  - You need to use `library()` function to load them in one by one
+    
+
+
 ## Data types
 
 In R there are 4 main data types:
@@ -102,6 +125,7 @@ In R there are 4 main data types:
   - character `chr`
   - factor `fct`
   - numeric `num`
+  - list is a combination of the above (we will cover another day)
 
 ## Data types
 
@@ -112,7 +136,7 @@ In R there are 4 main data types:
 ## Data types
 
   - When you read data into R, R naively tries to assign each variable a data type
-  - Unless otherwise specified, R will always assign any variable with special characters and/or text to type `chr`
+  - Unless otherwise specified, R will usually assign any variable with special characters and/or text to type `chr`
   - Evaluating the data types of your variables after reading it in can help identify potential issues with the data 
   
 ## Data types
@@ -123,50 +147,3 @@ typeof(iris$Species)
 str(iris)
 ```
   
-
-## Data transformation
-
-Sometimes we want to make a fancy plot or a summary table of statistics, but more often than not, the data we obtain is not in the format we need it in to make these things. This is where **data transformation** or **data wrangling** becomes an important step in your data workflow.
-
-In this part of the less I will rely heavily on the `dplyr` package and provide a broad overview of what data transformation process can look like.
-
-## Getting to know your data
-
-  - `head()` : Base R, prints first 6 rows by default
-  - `glimpse()` : From `dplyr` allows you to see every column in the data frame, a subset of the values in each column, and the data type in each column. This can be helpful to diagnosis issues with the data quality.
-  
-
-## Filtering data
-
-  - `filter()` : From `dplyr` allows you to provide it a data frame and one or more conditions where cases == TRUE are retained in the output data frame.
-  - The convention in R is to specify the variable to evaluate on the left side hand of the formula and the value to include on the right hand side.
-  - There are different ways to specify a condition, it can be:
-    - Exact match or `==`
-    - Everything but this exact match `!=`
-    - In this vector of values, `%in%`
-  - _More advanced options_ 
-    - You can use `!` to include the _inverse_
-    - You can use partial string match with `str_detect()` function from `stringr` package (one of my favorites!)
-
-Solutions are endless!
-
-## Generic examples
-  
-```r
-variable == 1 # Exact match to value of 1
-variable != 1 # Everything BUT exact match to value of 1
-variable %in% c(1, 4, 5) # Value is equal to 1, 4, or 5
-!variable %in% c(1, 4, 5) # All values but 1, 4, or 5
-
-```
-
-## Sanity checks
-
-  - After ea/ data transformation step, it is best practice to provide some test that your processing worked as expected. 
-  - For instance, compare the number of rows and columns before and after filtering and/or the number of unique values of the filtered variable(s) before and after filtering.
-  
-## Changing data type
-
-## Re-coding
-
-# Ask Eve about covering merges, data binds, and reshaping data in next lecture
