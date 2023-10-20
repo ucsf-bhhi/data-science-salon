@@ -1,0 +1,161 @@
+---
+title: "Demo Code"
+format: html
+editor: visual
+---
+
+
+# Load libraries
+
+
+```{r, warning = F, comment = F}
+library(dplyr)
+library(lubridate)
+```
+
+
+# Examples
+
+## Examples: Basic math and operations on a vector 
+
+
+```{r}
+2 + 1
+```
+
+
+x gets assigned the value of `1` but it does not print
+
+```{r}
+x <- 1
+```
+
+
+Type x to print the value.
+
+
+```{r}
+x
+```
+
+
+You can assign a vector to an object, and apply a basic operation on each element of that vector
+
+
+```{r}
+y <- c(1, 2, 3, 5)
+
+1 + y
+```
+
+
+
+## What's in the name
+
+  * R is character and case sensitive, common error is when an object is not found due to a typo
+  
+## Example
+
+
+```{r}
+x <- 1
+#X
+```
+
+
+
+  * Object names can be overwritten with new values over and over
+
+```{r}
+
+# overwrite object x
+x <- 1
+x
+
+x <- 2
+x
+
+x <- 3
+x
+```
+
+
+
+## Calling functions
+
+R has a large collection of built-in functions that work like this: `function_name(argument1 = value1, arguement2 = value2, ...)`
+
+  * For example, `head` has a single argument called `x` where it is expecting a data set as input and the output displays the first 6 rows of the input data as default. It also has an arguement, `n` where you can provide an integer value to indicate how many rows to display.
+  * You can specify the input values explictley, e.g., `x = value`, or list the input(s) in the order the function expects each argument.
+  * You can learn more about what a function does by typing `?` before the function name in the console
+
+
+```{r}
+head(x = mtcars)
+head(x = mtcars, n = 10)
+head(mtcars, 10)
+?head
+```
+
+
+
+## Step I. Getting to know your data
+
+  - `head()` : Base R, prints first 6 rows by default
+  - `glimpse()` : From `dplyr` allows you to see every column in the data frame, a subset of the values in each column, and the data type in each column. This can be helpful to diagnosis issues with the data quality.
+
+  
+
+```{r}
+iris %>% 
+  glimpse()
+```
+
+  - `count()` : From `dplyr` gives you the number of unique observations found for a given variable. Can be used to get crosstab N as well.
+  
+
+```{r}
+iris %>% 
+  count(Species)
+```
+
+
+## Filtering data
+
+  - `filter()` : From `dplyr` allows you to provide it a data frame and one or more conditions where cases == TRUE are retained in the output data frame. 
+
+Because the first argument is the data frame, you can easily pipe the data to the `filter` function and fill in the rest of the required arguments.
+
+
+```{r}
+setosa_subset1 <- iris %>% 
+        filter(Species == "setosa")
+
+# Alternatively 
+setosa_subset2 <- iris %>% 
+        filter(Species %in% "setosa")
+
+# Select as inverse
+setosa_subset3 <- iris %>% 
+        filter(!Species %in% c("versicolor", "virginica"))
+
+dplyr::all_equal(setosa_subset1, setosa_subset2, setosa_subset3)
+```
+
+## Sanity check
+
+Whenever you `filter` data, you should always double check that you subset the data as you expected. One way is to compare number of rows in the data before and after and also looking at the unique values for a given variable in the data using `nrow` and `distinct()`
+
+
+```{r}
+nrow(iris)
+
+setosa_subset1 %>% 
+  nrow()
+
+setosa_subset1 %>% 
+  distinct(Species)
+```
+
+## Going from 
+

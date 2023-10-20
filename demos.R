@@ -1,6 +1,12 @@
 # Session: 2 Demo
 
-install.packages(c("ggplot2", "dplyr", "janitor"))
+# Package installation from CRAN
+
+install.packages(c("ggplot2", "dplyr", "janitor", "remotes"))
+
+# Install package from Github
+
+remotes::install_github("ucsf-bhhi/bhhitools")
 
 # Load libraries
 
@@ -18,7 +24,10 @@ x <- 2*3
 y <- (1:4)*x
 
 
-# Running base R function to generate an array of random numbers that have a mean of 10 and SD of 2
+# Running base R function to generate an array of random numbers 
+# that have a mean of 10 and SD of 2
+
+?rnorm
 
 rand_sample <- rnorm(100, mean = 10, sd = 2)
 
@@ -30,15 +39,23 @@ typeof(rand_sample)
 
 head(iris)
 
+str(iris)
+
 # It's best practice to keep header/variables clean of period marks in the name
 # Clean variable names with the clean_names function from the janitor package
+# You can call a function directly w/o loading a library using "::"
 
-iris_clean <- iris %>% 
+iris_clean <- iris |>  
   janitor::clean_names()
+
+# Check change
+
+iris_clean |> 
+  head()
 
 ## Evaluating data with glimpse()
 
-iris %>% 
+iris |>  
   glimpse()
 
 
