@@ -29,7 +29,31 @@ y <- (1:4)*x
 
 ?rnorm
 
+# Runing multiple functions wrapping one inside another (Not reccomended!!!)
+
+set.seed(123)
+rnorm(100, mean = 10, sd = 2)
+
+output_1 <- sqrt((abs(rnorm(100, mean = 10, sd = 2))))
+
+# Runing function using intermediate values
+set.seed(123)
 rand_sample <- rnorm(100, mean = 10, sd = 2)
+
+rand_sample_abs <- abs(rand_sample)
+
+output_2 <-  sqrt(rand_sample_abs)
+
+# Piping version
+set.seed(123)
+
+output_3 <- rnorm(100, mean = 10, sd = 2) |> 
+  abs() |> 
+  sqrt()
+  
+# Note, you can also do pipe with "%>%" symbol--but this requires loading the dplyr package.
+# Before piping was incorporated into 4.1+ version of R studio, we used this version of piping
+
 
 # Inspect data type
 
