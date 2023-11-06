@@ -29,7 +29,7 @@ y <- (1:4)*x
 
 ?rnorm
 
-# Runing multiple functions wrapping one inside another (Not reccomended!!!)
+# Running multiple functions wrapping one inside another (Not recommended!!!)
 
 set.seed(123)
 rnorm(100, mean = 10, sd = 2)
