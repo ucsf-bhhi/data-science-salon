@@ -110,5 +110,159 @@
     "title": "Data Science Salon",
     "section": "",
     "text": "Intro to R\n\n\nData Science Salon - Session 1\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nEve Perry\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "02-r-basics/index.html#outline",
+    "href": "02-r-basics/index.html#outline",
+    "title": "R Basics",
+    "section": "Outline",
+    "text": "Outline\n\nCoding basics\nData types\nInteracting with data (Getting started with Data)\n\nChapter 3: Workflow basics\nChapter 4: Interacting with Data\n\nR for Data Science (via Hadley Wickham)"
+  },
+  {
+    "objectID": "02-r-basics/index.html#coding-basics",
+    "href": "02-r-basics/index.html#coding-basics",
+    "title": "R Basics",
+    "section": "Coding basics",
+    "text": "Coding basics\n\nR can be used to do basic math calculations\n\nBasic arithmetic on vectors is applied to every element of the vector.\n\nIn R, new objects can be created with the assignment operator &lt;-\n\nRStudio’s keyboard shortcut: Alt + - (the minus sign) to save time."
+  },
+  {
+    "objectID": "02-r-basics/index.html#comments",
+    "href": "02-r-basics/index.html#comments",
+    "title": "R Basics",
+    "section": "Comments",
+    "text": "Comments\nComments are important and used mainly as a brief description for what the following code does.\n\nR will ignore text after a # in that line, but the text can still be read by users\nSome short code is self explanatory and does not require any description\nBest practice is to explain why code was written rather explaining every single line\n\nCode will often get updated, and it can be tedious to update every single comment"
+  },
+  {
+    "objectID": "02-r-basics/index.html#comments-example",
+    "href": "02-r-basics/index.html#comments-example",
+    "title": "R Basics",
+    "section": "Comments (example)",
+    "text": "Comments (example)\n# Create a vector of even numbers between 1 and 10\neven &lt;- c(2, 4, 6, 8, 10)"
+  },
+  {
+    "objectID": "02-r-basics/index.html#whats-in-the-name",
+    "href": "02-r-basics/index.html#whats-in-the-name",
+    "title": "R Basics",
+    "section": "What’s in the name",
+    "text": "What’s in the name\n\nObject names must start with a letter and can only contain letters, numbers, and _ and .\n\nIt’s not good practice to use . in variable/file names, however – this leads to buggy programming across platforms\n\nObject names should be brief and descriptive–it is best to adopt a convention for multiple words, such as snake_case\n\nsnake_case is where you separate lowercase words with *_*\n\nIn R objects can be overwritten over and over"
+  },
+  {
+    "objectID": "02-r-basics/index.html#whats-in-the-name-1",
+    "href": "02-r-basics/index.html#whats-in-the-name-1",
+    "title": "R Basics",
+    "section": "What’s in the name",
+    "text": "What’s in the name\n# snake_case\nraw_data\nclean_data\n\n# overwrite object x\nx &lt;- 1\nx\nx &lt;- 2\nx"
+  },
+  {
+    "objectID": "02-r-basics/index.html#whats-in-the-name-2",
+    "href": "02-r-basics/index.html#whats-in-the-name-2",
+    "title": "R Basics",
+    "section": "What’s in the name",
+    "text": "What’s in the name\n\nR is character and case sensitive, common error is when an object is not found due to a typo"
+  },
+  {
+    "objectID": "02-r-basics/index.html#example",
+    "href": "02-r-basics/index.html#example",
+    "title": "R Basics",
+    "section": "Example",
+    "text": "Example\nx &lt;- 1\nX\n#&gt; Error: object 'X' not found"
+  },
+  {
+    "objectID": "02-r-basics/index.html#calling-functions",
+    "href": "02-r-basics/index.html#calling-functions",
+    "title": "R Basics",
+    "section": "Calling functions",
+    "text": "Calling functions\nR has a large collection of built-in functions that work like this:\nfunction_name(argument1 = value1, arguement2 = value2, ...)"
+  },
+  {
+    "objectID": "02-r-basics/index.html#calling-functions-1",
+    "href": "02-r-basics/index.html#calling-functions-1",
+    "title": "R Basics",
+    "section": "Calling functions",
+    "text": "Calling functions\n\nFor example, head is a base R function that prints a few rows of data,\n\nhas two arguments one x where it is expecting a data set as input and a optional second argument n where it is expecting an integer value as input to specify the number of row(s) to print\nThe output displays the first 6 rows of the input data as default"
+  },
+  {
+    "objectID": "02-r-basics/index.html#calling-functions-2",
+    "href": "02-r-basics/index.html#calling-functions-2",
+    "title": "R Basics",
+    "section": "Calling functions",
+    "text": "Calling functions\nhead(x = iris, n = 10)"
+  },
+  {
+    "objectID": "02-r-basics/index.html#calling-functions-3",
+    "href": "02-r-basics/index.html#calling-functions-3",
+    "title": "R Basics",
+    "section": "Calling functions",
+    "text": "Calling functions\n\nYou can specify the input values explicitly, e.g., x = value, or list the input(s) in the order the function expects each argument, e.g., head(data, 5)\nYou can learn more about what a function does by typing ? before the function name in the console"
+  },
+  {
+    "objectID": "02-r-basics/index.html#calling-functions-4",
+    "href": "02-r-basics/index.html#calling-functions-4",
+    "title": "R Basics",
+    "section": "Calling functions",
+    "text": "Calling functions\nhead(iris, 10)"
+  },
+  {
+    "objectID": "02-r-basics/index.html#calling-functions-5",
+    "href": "02-r-basics/index.html#calling-functions-5",
+    "title": "R Basics",
+    "section": "Calling functions",
+    "text": "Calling functions\nR studio version 4.1+ now support the use of piping with |&gt;, essentially this allows you to feed anything on the left side of the |&gt; to a function on the right side, making code more efficient by removing the need to wrap functions within functions or make intermediate variables.\niris |&gt;\n  head(10)"
+  },
+  {
+    "objectID": "02-r-basics/index.html#r-packages",
+    "href": "02-r-basics/index.html#r-packages",
+    "title": "R Basics",
+    "section": "R packages",
+    "text": "R packages\nAccording to google, the Comprehensive R Archive Network aka CRAN now has 20,004 available packages. Expanding R’s functionality and allowing you to do many things including, but not limited to:\n\nBuilding custom data visualizations and dashboards\nExplore, manipulate, and perform calculations on datasets\nPerform data experiments\nPerform machine learning etc."
+  },
+  {
+    "objectID": "02-r-basics/index.html#installingusing-packages",
+    "href": "02-r-basics/index.html#installingusing-packages",
+    "title": "R Basics",
+    "section": "Installing/Using packages",
+    "text": "Installing/Using packages\n\nYou can easily install packages with the install.packages() function from base R–which install packages from CRAN\n\nhowever developmental version of packages are often readily available and can be installed in Git\nTo intsall packages from Git you will need to use functions from the devtools package"
+  },
+  {
+    "objectID": "02-r-basics/index.html#installation-example",
+    "href": "02-r-basics/index.html#installation-example",
+    "title": "R Basics",
+    "section": "Installation example",
+    "text": "Installation example\ninstall.packages(\"dplyr\")"
+  },
+  {
+    "objectID": "02-r-basics/index.html#loading-libraries",
+    "href": "02-r-basics/index.html#loading-libraries",
+    "title": "R Basics",
+    "section": "Loading libraries",
+    "text": "Loading libraries\n\nLibraries are not automatically loaded into your R environment (by default)\nYou need to use library() function to load them in one by one"
+  },
+  {
+    "objectID": "02-r-basics/index.html#data-types",
+    "href": "02-r-basics/index.html#data-types",
+    "title": "R Basics",
+    "section": "Data types",
+    "text": "Data types\nIn R there are 4 main data types:\n\ninteger int\ncharacter chr\nfactor fct\nnumeric num\nlist is a combination of the above (we will cover another day)"
+  },
+  {
+    "objectID": "02-r-basics/index.html#data-types-1",
+    "href": "02-r-basics/index.html#data-types-1",
+    "title": "R Basics",
+    "section": "Data types",
+    "text": "Data types\n\nIn R, both character and factor data types are specified in quotes, whereas integer data and numeric data are specified without quotes.\nMathematical operations can only be performed on integer or numeric data.\nCharacter data is typically used to store text like features, whereas factor data is intended to have some kind of leveling structure, e.g., Species variable in the iris data"
+  },
+  {
+    "objectID": "02-r-basics/index.html#data-types-2",
+    "href": "02-r-basics/index.html#data-types-2",
+    "title": "R Basics",
+    "section": "Data types",
+    "text": "Data types\n\nWhen you read data into R, R naively tries to assign each variable a data type\nUnless otherwise specified, R will usually assign any variable with special characters and/or text to type chr\nEvaluating the data types of your variables after reading it in can help identify potential issues with the data"
+  },
+  {
+    "objectID": "02-r-basics/index.html#data-types-3",
+    "href": "02-r-basics/index.html#data-types-3",
+    "title": "R Basics",
+    "section": "Data types",
+    "text": "Data types\ntypeof(iris$Species)\n\nstr(iris)"
   }
 ]
