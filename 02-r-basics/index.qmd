@@ -1,0 +1,174 @@
+---
+title: "R Basics"
+subtitle: "Data Science Salon - Session 2"
+author: "Sara Colom"
+date: today
+format: revealjs
+---
+
+## Outline
+
+* Coding basics
+* Data types
+* Interacting with data (Getting started with Data)
+
+Chapter 3: Workflow basics  
+Chapter 4: Interacting with Data
+
+![R for Data Science (via [Hadley Wickham](https://r4ds.had.co.nz/))](https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png)
+
+## Coding basics
+
+  * R can be used to do basic math calculations
+    * Basic arithmetic on vectors is applied to every element of the vector.
+  * In R, new objects can be created with the assignment operator `<-` 
+    * RStudio’s keyboard shortcut: Alt + - (the minus sign) to save time.
+
+
+## Comments
+
+Comments are important and used mainly as a brief description for what the following code does.
+
+  * R will ignore text after a `#` in that line, but the text can still be read by users
+  * Some short code is self explanatory and does not require any description
+  * Best practice is to explain _why_ code was written rather explaining every single line
+    * Code will often get updated, and it can be tedious to update every single comment
+
+## Comments (example)
+
+```r
+# Create a vector of even numbers between 1 and 10
+even <- c(2, 4, 6, 8, 10)
+```
+
+## What's in the name
+
+  * Object names must start with a letter and can only contain letters, numbers, and `_` and `.`
+    * It's not good practice to use `.` in variable/file names, however -- this leads to buggy programming across platforms
+  * Object names should be brief and descriptive--it is best to adopt a convention for multiple words, such as `snake_case`
+    * **snake_case** is where you separate lowercase words with *_*
+  * In R objects can be overwritten over and over
+
+## What's in the name
+    
+```r
+# snake_case
+raw_data
+clean_data
+
+# overwrite object x
+x <- 1
+x
+x <- 2
+x
+```
+
+## What's in the name
+
+  * R is character and case sensitive, common error is when an object is not found due to a typo
+  
+## Example
+
+```r
+x <- 1
+X
+#> Error: object 'X' not found
+```
+
+## Calling functions
+
+R has a large collection of built-in functions that work like this: 
+
+`function_name(argument1 = value1, arguement2 = value2, ...)`
+
+## Calling functions
+
+  * For example, `head` is a base R function that prints a few rows of data,
+    * has two arguments one  `x` where it is expecting a data set as input and a optional second argument `n` where it is expecting an integer value as input to specify the number of row(s) to print
+    * The output displays the first 6 rows of the input data as default
+    
+## Calling functions
+
+```r
+head(x = iris, n = 10)
+```
+  
+## Calling functions  
+  
+  * You can specify the input values explicitly, e.g., `x = value`, or list the input(s) in the order the function expects each argument, e.g., `head(data, 5)`
+  * You can learn more about what a function does by typing `?` before the function name in the console
+  
+## Calling functions
+
+```r
+head(iris, 10)
+```
+  
+## Calling functions
+
+R studio version 4.1+ now support the use of piping with `|>`, essentially this allows you to feed anything on the left side of the `|>` to a function on the right side, making code more efficient by removing the need to wrap functions within functions or make intermediate variables.
+
+```r
+iris |>
+  head(10)
+```
+## R packages
+
+According to google, the _Comprehensive R Archive Network_ aka CRAN now has 20,004 available packages. Expanding R's functionality and allowing you to do many things including, but not limited to:
+
+  * Building custom data visualizations and dashboards
+  * Explore, manipulate, and perform calculations on datasets
+  * Perform data experiments 
+  * Perform machine learning etc.
+
+
+
+## Installing/Using packages
+
+  - You can easily install packages with the `install.packages()` function from base R--which install packages from `CRAN`
+    - _however_  developmental version of packages are often readily available and can be installed in `Git`
+    - To intsall packages from `Git` you will need to use functions from the `devtools` package
+    
+    
+## Installation example
+
+```r
+install.packages("dplyr")
+```
+
+## Loading libraries
+
+  - Libraries are not automatically loaded into your R environment (by default)
+  - You need to use `library()` function to load them in one by one
+    
+
+## Data types
+
+In R there are 4 main data types:
+
+  - integer `int`
+  - character `chr`
+  - factor `fct`
+  - numeric `num`
+  - list is a combination of the above (we will cover another day)
+
+## Data types
+
+  - In R, both character and factor data types are specified in quotes, whereas integer data and numeric data are specified without quotes.
+  - Mathematical operations can only be performed on integer or numeric data.
+  - Character data is typically used to store text like features, whereas factor data is intended to have some kind of leveling structure, e.g., `Species` variable in the `iris` data
+
+## Data types
+
+  - When you read data into R, R naively tries to assign each variable a data type
+  - Unless otherwise specified, R will usually assign any variable with special characters and/or text to type `chr`
+  - Evaluating the data types of your variables after reading it in can help identify potential issues with the data 
+  
+## Data types
+
+```r
+typeof(iris$Species)
+
+str(iris)
+```
+  
