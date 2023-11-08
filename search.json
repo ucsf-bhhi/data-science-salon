@@ -1,5 +1,201 @@
 [
   {
+    "objectID": "03-importing-data/index.html#outline",
+    "href": "03-importing-data/index.html#outline",
+    "title": "Importing Data in R",
+    "section": "Outline",
+    "text": "Outline\n\nTypes of Data\nUseful Packages\nExamples\n\nR for Data Science Chapter 8: Data Import"
+  },
+  {
+    "objectID": "03-importing-data/index.html#general-purpose-flat-files",
+    "href": "03-importing-data/index.html#general-purpose-flat-files",
+    "title": "Importing Data in R",
+    "section": "General Purpose Flat Files",
+    "text": "General Purpose Flat Files\n\n\n\nFile Type\nUsual File Extensions\nR Packages\n\n\n\n\nComma Separated (CSV)\n.csv\nreadr, base R\n\n\nExcel Spreadsheets\n.xls, .xlsx\nreadxl , writexl\n\n\nTab Separated\n.tsv\nreadr, base R\n\n\nFixed Width\nVaries\nreadr, base R"
+  },
+  {
+    "objectID": "03-importing-data/index.html#stats-packages-flat-files",
+    "href": "03-importing-data/index.html#stats-packages-flat-files",
+    "title": "Importing Data in R",
+    "section": "Stats Packages Flat Files",
+    "text": "Stats Packages Flat Files\n\n\n\nFile Type\nUsual File Extensions\nR Packages\n\n\n\n\nR\n.rds\nreadr, base R\n\n\nStata\n.dta\nhaven, labelled\n\n\nSAS\n.sas7bdat , .sas7bcat , .xpt\nhaven\n\n\nSPSS\n.sav, .por\nhaven\n\n\n\n\nExporting data to SAS is tricky. As far as I know it’s not possible to create .sas7bdat files but it may be possible to create .xpt files."
+  },
+  {
+    "objectID": "03-importing-data/index.html#advanced-data",
+    "href": "03-importing-data/index.html#advanced-data",
+    "title": "Importing Data in R",
+    "section": "Advanced Data",
+    "text": "Advanced Data\n\nGoogle Sheets: googlesheets4 package\nGoogle Drive: googledrive package\nDatabases: dbplyr package, DBI package\nAPIs\n\nGeneral Use: httr, httr2 packages\nSpecific APIs: REDCapR and other packages\n\nWeb Scraping: rvest package"
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-initial-import",
+    "href": "03-importing-data/index.html#csv-initial-import",
+    "title": "Importing Data in R",
+    "section": "CSV: Initial Import",
+    "text": "CSV: Initial Import\nRaw Data\nStudent ID,Full Name,favourite.food,mealPlan,AGE,DOB\n1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4,10/26/2019\n2,Barclay Lynn,French fries,Lunch only,5,3/14/2018\n3,Jayendra Lyne,N/A,Breakfast and lunch,7,7/15/2016\n4,Leon Rossini,Anchovies,Lunch only,,\n5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five,9/14/2018\n6,Güvenç Attila,Ice cream,Lunch only,6,1/23/2019\n\nlibrary(readr)\nstudents &lt;- read_csv(\"data/students.csv\") \n\nstudents\n\n# A tibble: 6 × 6\n  `Student ID` `Full Name`      favourite.food     mealPlan          AGE   DOB  \n         &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;             &lt;chr&gt; &lt;chr&gt;\n1            1 Sunil Huffmann   Strawberry yoghurt Lunch only        4     10/2…\n2            2 Barclay Lynn     French fries       Lunch only        5     3/14…\n3            3 Jayendra Lyne    N/A                Breakfast and lu… 7     7/15…\n4            4 Leon Rossini     Anchovies          Lunch only        &lt;NA&gt;  &lt;NA&gt; \n5            5 Chidiegwu Dunkel Pizza              Breakfast and lu… five  9/14…\n6            6 Güvenç Attila    Ice cream          Lunch only        6     1/23…\n\n\n\nNote the special variable names and explain the ``"
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-fix-variable-names-with-dplyrrename",
+    "href": "03-importing-data/index.html#csv-fix-variable-names-with-dplyrrename",
+    "title": "Importing Data in R",
+    "section": "CSV: Fix Variable Names with dplyr::rename()",
+    "text": "CSV: Fix Variable Names with dplyr::rename()\n\nlibrary(dplyr)\n\nstudents &lt;- read_csv(\"data/students.csv\") |&gt; \n  rename(\n    student_id = `Student ID`,\n    full_name = `Full Name`,\n    favorite_food = favourite.food,\n    meal_plan = mealPlan,\n    age = AGE\n  )\n\nstudents\n\n# A tibble: 6 × 6\n  student_id full_name        favorite_food      meal_plan           age   DOB  \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt;\n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4     10/2…\n2          2 Barclay Lynn     French fries       Lunch only          5     3/14…\n3          3 Jayendra Lyne    N/A                Breakfast and lunch 7     7/15…\n4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt;  &lt;NA&gt; \n5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five  9/14…\n6          6 Güvenç Attila    Ice cream          Lunch only          6     1/23…"
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-fix-variable-names-with-janitorclean_names",
+    "href": "03-importing-data/index.html#csv-fix-variable-names-with-janitorclean_names",
+    "title": "Importing Data in R",
+    "section": "CSV: Fix Variable Names with janitor::clean_names()",
+    "text": "CSV: Fix Variable Names with janitor::clean_names()\n\nlibrary(janitor)\n\nstudents &lt;- read_csv(\"data/students.csv\") |&gt; \n  clean_names()\n\nstudents\n\n# A tibble: 6 × 6\n  student_id full_name        favourite_food     meal_plan           age   dob  \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt;\n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4     10/2…\n2          2 Barclay Lynn     French fries       Lunch only          5     3/14…\n3          3 Jayendra Lyne    N/A                Breakfast and lunch 7     7/15…\n4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt;  &lt;NA&gt; \n5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five  9/14…\n6          6 Güvenç Attila    Ice cream          Lunch only          6     1/23…"
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-files-without-variable-names",
+    "href": "03-importing-data/index.html#csv-files-without-variable-names",
+    "title": "Importing Data in R",
+    "section": "CSV: Files Without Variable Names",
+    "text": "CSV: Files Without Variable Names\n1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4\n2,Barclay Lynn,French fries,Lunch only,5\n3,Jayendra Lyne,N/A,Breakfast and lunch,7\n4,Leon Rossini,Anchovies,Lunch only,\n5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five\n6,Güvenç Attila,Ice cream,Lunch only,6\n\n\nstudents &lt;- read_csv(\n  \"data/students_no_variable_names.csv\",\n  col_names = c(\"student_id\", \"full_name\", \"favorite_food\", \"meal_plan\", \"age\", \"dob\")\n)\n\nstudents\n\n# A tibble: 6 × 6\n  student_id full_name        favorite_food      meal_plan           age   dob  \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt;\n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4     10/2…\n2          2 Barclay Lynn     French fries       Lunch only          5     3/14…\n3          3 Jayendra Lyne    N/A                Breakfast and lunch 7     7/15…\n4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt;  &lt;NA&gt; \n5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five  9/14…\n6          6 Güvenç Attila    Ice cream          Lunch only          6     1/23…"
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-missing-data",
+    "href": "03-importing-data/index.html#csv-missing-data",
+    "title": "Importing Data in R",
+    "section": "CSV: Missing Data",
+    "text": "CSV: Missing Data\nRaw Data\nStudent ID,Full Name,favourite.food,mealPlan,AGE\n1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4\n2,Barclay Lynn,French fries,Lunch only,5\n3,Jayendra Lyne,N/A,Breakfast and lunch,7\n4,Leon Rossini,Anchovies,Lunch only,\n5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five\n6,Güvenç Attila,Ice cream,Lunch only,6\n\nstudents\n\n# A tibble: 6 × 6\n  student_id full_name        favorite_food      meal_plan           age   dob  \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt;\n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4     10/2…\n2          2 Barclay Lynn     French fries       Lunch only          5     3/14…\n3          3 Jayendra Lyne    N/A                Breakfast and lunch 7     7/15…\n4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt;  &lt;NA&gt; \n5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five  9/14…\n6          6 Güvenç Attila    Ice cream          Lunch only          6     1/23…\n\n\n\nBy default, only “” is treated as N/A"
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-missing-data-1",
+    "href": "03-importing-data/index.html#csv-missing-data-1",
+    "title": "Importing Data in R",
+    "section": "CSV: Missing Data",
+    "text": "CSV: Missing Data\n\nstudents &lt;- read_csv(\"data/students.csv\", na = c(\"N/A\", \"\")) |&gt; \n  clean_names()\n\nstudents\n\n# A tibble: 6 × 6\n  student_id full_name        favourite_food     meal_plan           age   dob  \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt;\n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4     10/2…\n2          2 Barclay Lynn     French fries       Lunch only          5     3/14…\n3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and lunch 7     7/15…\n4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt;  &lt;NA&gt; \n5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five  9/14…\n6          6 Güvenç Attila    Ice cream          Lunch only          6     1/23…\n\n\n\nIf you specify other NA values, then you have to explicitly specify “”"
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-variable-types",
+    "href": "03-importing-data/index.html#csv-variable-types",
+    "title": "Importing Data in R",
+    "section": "CSV: Variable Types",
+    "text": "CSV: Variable Types\n\n\n# A tibble: 6 × 6\n  student_id full_name        favourite_food     meal_plan           age   dob  \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt;\n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only          4     10/2…\n2          2 Barclay Lynn     French fries       Lunch only          5     3/14…\n3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and lunch 7     7/15…\n4          4 Leon Rossini     Anchovies          Lunch only          &lt;NA&gt;  &lt;NA&gt; \n5          5 Chidiegwu Dunkel Pizza              Breakfast and lunch five  9/14…\n6          6 Güvenç Attila    Ice cream          Lunch only          6     1/23…\n\n\n\nNote that dob is imported as a string variable and meal_plan might be more useful as a factor."
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-variable-types-1",
+    "href": "03-importing-data/index.html#csv-variable-types-1",
+    "title": "Importing Data in R",
+    "section": "CSV: Variable Types",
+    "text": "CSV: Variable Types\n\nstudents &lt;- read_csv(\n  \"data/students.csv\",\n  na = c(\"N/A\", \"\"),\n  col_types = cols(mealPlan = col_factor(), DOB = col_date(format = \"%m/%d/%Y\"))\n) |&gt; \n  clean_names()\n\nstudents\n\n# A tibble: 6 × 6\n  student_id full_name        favourite_food     meal_plan      age   dob       \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;fct&gt;          &lt;chr&gt; &lt;date&gt;    \n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only     4     2019-10-26\n2          2 Barclay Lynn     French fries       Lunch only     5     2018-03-14\n3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and… 7     2016-07-15\n4          4 Leon Rossini     Anchovies          Lunch only     &lt;NA&gt;  NA        \n5          5 Chidiegwu Dunkel Pizza              Breakfast and… five  2018-09-14\n6          6 Güvenç Attila    Ice cream          Lunch only     6     2019-01-23\n\n\n\nNote that you have to use the variable names as they appear in the raw data to specify types."
+  },
+  {
+    "objectID": "03-importing-data/index.html#csv-exporting-data",
+    "href": "03-importing-data/index.html#csv-exporting-data",
+    "title": "Importing Data in R",
+    "section": "CSV: Exporting Data",
+    "text": "CSV: Exporting Data\n\nwrite_csv(students, \"data/students_clean.csv\")\n\nread_csv(\"data/students_clean.csv\")\n\n# A tibble: 6 × 6\n  student_id full_name        favourite_food     meal_plan      age   dob       \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;          &lt;chr&gt; &lt;date&gt;    \n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only     4     2019-10-26\n2          2 Barclay Lynn     French fries       Lunch only     5     2018-03-14\n3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and… 7     2016-07-15\n4          4 Leon Rossini     Anchovies          Lunch only     &lt;NA&gt;  NA        \n5          5 Chidiegwu Dunkel Pizza              Breakfast and… five  2018-09-14\n6          6 Güvenç Attila    Ice cream          Lunch only     6     2019-01-23\n\n\n\nWe lose the factor, but keep the data b/c readr writes dates in CSVs in the way that it automatically recognizes them during import."
+  },
+  {
+    "objectID": "03-importing-data/index.html#excel-initial-import",
+    "href": "03-importing-data/index.html#excel-initial-import",
+    "title": "Importing Data in R",
+    "section": "Excel: Initial Import",
+    "text": "Excel: Initial Import\n\nlibrary(readxl)\n\nread_excel(\"data/students.xlsx\")\n\n# A tibble: 6 × 6\n  `Student ID` `Full Name`     favourite.food mealPlan AGE   DOB                \n         &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt; &lt;dttm&gt;             \n1            1 Sunil Huffmann  Strawberry yo… Lunch o… 4     2019-10-26 00:00:00\n2            2 Barclay Lynn    French fries   Lunch o… 5     2018-03-14 00:00:00\n3            3 Jayendra Lyne   N/A            Breakfa… 7     2016-07-15 00:00:00\n4            4 Leon Rossini    Anchovies      Lunch o… &lt;NA&gt;  NA                 \n5            5 Chidiegwu Dunk… Pizza          Breakfa… five  2018-09-14 00:00:00\n6            6 Güvenç Attila   Ice cream      Lunch o… 6     2019-01-23 00:00:00"
+  },
+  {
+    "objectID": "03-importing-data/index.html#excel-multiple-tabs",
+    "href": "03-importing-data/index.html#excel-multiple-tabs",
+    "title": "Importing Data in R",
+    "section": "Excel: Multiple Tabs",
+    "text": "Excel: Multiple Tabs\n\nread_excel(\"data/students.xlsx\", sheet = \"Student List\")\n\n# A tibble: 6 × 6\n  `Student ID` `Full Name`     favourite.food mealPlan AGE   DOB                \n         &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt; &lt;dttm&gt;             \n1            1 Sunil Huffmann  Strawberry yo… Lunch o… 4     2019-10-26 00:00:00\n2            2 Barclay Lynn    French fries   Lunch o… 5     2018-03-14 00:00:00\n3            3 Jayendra Lyne   N/A            Breakfa… 7     2016-07-15 00:00:00\n4            4 Leon Rossini    Anchovies      Lunch o… &lt;NA&gt;  NA                 \n5            5 Chidiegwu Dunk… Pizza          Breakfa… five  2018-09-14 00:00:00\n6            6 Güvenç Attila   Ice cream      Lunch o… 6     2019-01-23 00:00:00"
+  },
+  {
+    "objectID": "03-importing-data/index.html#excel-specify-column-names",
+    "href": "03-importing-data/index.html#excel-specify-column-names",
+    "title": "Importing Data in R",
+    "section": "Excel: Specify Column Names",
+    "text": "Excel: Specify Column Names\n\nread_excel(\n  \"data/students.xlsx\",\n  col_names = c(\"student_id\", \"full_name\", \"favorite_food\", \"meal_plan\", \"age\", \"dob\"),\n  skip = 1\n)\n\n# A tibble: 6 × 6\n  student_id full_name        favorite_food  meal_plan age   dob                \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt; &lt;dttm&gt;             \n1          1 Sunil Huffmann   Strawberry yo… Lunch on… 4     2019-10-26 00:00:00\n2          2 Barclay Lynn     French fries   Lunch on… 5     2018-03-14 00:00:00\n3          3 Jayendra Lyne    N/A            Breakfas… 7     2016-07-15 00:00:00\n4          4 Leon Rossini     Anchovies      Lunch on… &lt;NA&gt;  NA                 \n5          5 Chidiegwu Dunkel Pizza          Breakfas… five  2018-09-14 00:00:00\n6          6 Güvenç Attila    Ice cream      Lunch on… 6     2019-01-23 00:00:00"
+  },
+  {
+    "objectID": "03-importing-data/index.html#excel-variable-types-missing-data",
+    "href": "03-importing-data/index.html#excel-variable-types-missing-data",
+    "title": "Importing Data in R",
+    "section": "Excel: Variable Types & Missing Data",
+    "text": "Excel: Variable Types & Missing Data\n\nexcel_students = read_excel(\n  \"data/students.xlsx\",\n  col_types = c(\"text\", \"guess\", \"guess\", \"skip\", \"guess\", \"date\"),\n  na = c(\"\", \"N/A\")\n) |&gt; \n  clean_names()\n\nexcel_students\n\n# A tibble: 6 × 5\n  student_id full_name        favourite_food     age   dob                \n  &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt; &lt;dttm&gt;             \n1 1          Sunil Huffmann   Strawberry yoghurt 4     2019-10-26 00:00:00\n2 2          Barclay Lynn     French fries       5     2018-03-14 00:00:00\n3 3          Jayendra Lyne    &lt;NA&gt;               7     2016-07-15 00:00:00\n4 4          Leon Rossini     Anchovies          &lt;NA&gt;  NA                 \n5 5          Chidiegwu Dunkel Pizza              five  2018-09-14 00:00:00\n6 6          Güvenç Attila    Ice cream          6     2019-01-23 00:00:00\n\n\n\nUnlike CSVs if you want to specify one variable’s type, you have to specify all of them."
+  },
+  {
+    "objectID": "03-importing-data/index.html#excel-a-warning-about-dates",
+    "href": "03-importing-data/index.html#excel-a-warning-about-dates",
+    "title": "Importing Data in R",
+    "section": "Excel: A Warning About Dates",
+    "text": "Excel: A Warning About Dates\n\nread_excel(\n  \"data/students.xlsx\",\n  col_types = c(\"text\", \"guess\", \"guess\", \"skip\", \"guess\", \"text\"),\n  na = c(\"\", \"N/A\")\n) |&gt; \n  clean_names()\n\n# A tibble: 6 × 5\n  student_id full_name        favourite_food     age   dob  \n  &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt; &lt;chr&gt;\n1 1          Sunil Huffmann   Strawberry yoghurt 4     43764\n2 2          Barclay Lynn     French fries       5     43173\n3 3          Jayendra Lyne    &lt;NA&gt;               7     42566\n4 4          Leon Rossini     Anchovies          &lt;NA&gt;  &lt;NA&gt; \n5 5          Chidiegwu Dunkel Pizza              five  43357\n6 6          Güvenç Attila    Ice cream          6     43488"
+  },
+  {
+    "objectID": "03-importing-data/index.html#excel-exporting-data",
+    "href": "03-importing-data/index.html#excel-exporting-data",
+    "title": "Importing Data in R",
+    "section": "Excel: Exporting Data",
+    "text": "Excel: Exporting Data\n\nlibrary(writexl)\n\nwrite_xlsx(excel_students, \"data/students_clean.xlsx\")\n\nread_excel(\"data/students_clean.xlsx\")\n\n# A tibble: 6 × 5\n  student_id full_name        favourite_food     age   dob                \n  &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt; &lt;dttm&gt;             \n1 1          Sunil Huffmann   Strawberry yoghurt 4     2019-10-26 00:00:00\n2 2          Barclay Lynn     French fries       5     2018-03-14 00:00:00\n3 3          Jayendra Lyne    &lt;NA&gt;               7     2016-07-15 00:00:00\n4 4          Leon Rossini     Anchovies          &lt;NA&gt;  NA                 \n5 5          Chidiegwu Dunkel Pizza              five  2018-09-14 00:00:00\n6 6          Güvenç Attila    Ice cream          6     2019-01-23 00:00:00"
+  },
+  {
+    "objectID": "03-importing-data/index.html#rds-rs-storage-format",
+    "href": "03-importing-data/index.html#rds-rs-storage-format",
+    "title": "Importing Data in R",
+    "section": "RDS: R’s storage format",
+    "text": "RDS: R’s storage format\n\nwrite_rds(students, \"data/students_clean.rds\")\n\nstudents_rds &lt;- read_rds(\"data/students_clean.rds\")\n\nstudents_rds\n\n# A tibble: 6 × 6\n  student_id full_name        favourite_food     meal_plan      age   dob       \n       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;              &lt;fct&gt;          &lt;chr&gt; &lt;date&gt;    \n1          1 Sunil Huffmann   Strawberry yoghurt Lunch only     4     2019-10-26\n2          2 Barclay Lynn     French fries       Lunch only     5     2018-03-14\n3          3 Jayendra Lyne    &lt;NA&gt;               Breakfast and… 7     2016-07-15\n4          4 Leon Rossini     Anchovies          Lunch only     &lt;NA&gt;  NA        \n5          5 Chidiegwu Dunkel Pizza              Breakfast and… five  2018-09-14\n6          6 Güvenç Attila    Ice cream          Lunch only     6     2019-01-23\n\n\n\nRDS just saves an R object to disk as it currently exists. When you read it back in have to assign it to an object. Note that there are other less common and more specialized R storage formats that you might encounter."
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-initial-import",
+    "href": "03-importing-data/index.html#stata-initial-import",
+    "title": "Importing Data in R",
+    "section": "Stata: Initial Import",
+    "text": "Stata: Initial Import\n--------------------------------------------------------------------------------\nVariable      Storage   Display    Value\n    name         type    format    label      Variable label\n--------------------------------------------------------------------------------\nmake            str18   %-18s                 Make and model\nprice           int     %8.0gc                Price\nmpg             int     %8.0g                 Mileage (mpg)\nrep78           int     %9.0g      repair     Repair record 1978\nheadroom        float   %6.1f                 Headroom (in.)\nreview_date     float   %td                   \ntrunk           int     %8.0g                 Trunk space (cu. ft.)\nweight          int     %8.0gc                Weight (lbs.)\nlength          int     %8.0g                 Length (in.)\nturn            int     %8.0g                 Turn circle (ft.)\ndisplacement    int     %8.0g                 Displacement (cu. in.)\ngear_ratio      float   %6.2f                 Gear ratio\nforeign         byte    %8.0g      origin     Car origin\n--------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-initial-import-1",
+    "href": "03-importing-data/index.html#stata-initial-import-1",
+    "title": "Importing Data in R",
+    "section": "Stata: Initial Import",
+    "text": "Stata: Initial Import\n\nlibrary(haven)\n\nauto2 = read_dta(\"data/auto2.dta\")\n\nauto2\n\n# A tibble: 74 × 13\n   make      price   mpg rep78    headroom review_date trunk weight length  turn\n   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl+lb&gt;    &lt;dbl&gt; &lt;date&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n 1 AMC Conc…  4099    22  3 [Ave…      2.5 1978-04-28     11   2930    186    40\n 2 AMC Pacer  4749    17  3 [Ave…      3   1978-03-27     11   3350    173    40\n 3 AMC Spir…  3799    22 NA            3   1978-06-10     12   2640    168    35\n 4 Buick Ce…  4816    20  3 [Ave…      4.5 1978-02-09     16   3250    196    40\n 5 Buick El…  7827    15  4 [Goo…      4   1978-11-21     20   4080    222    43\n 6 Buick Le…  5788    18  3 [Ave…      4   1978-01-14     21   3670    218    43\n 7 Buick Op…  4453    26 NA            3   1978-04-03     10   2230    170    34\n 8 Buick Re…  5189    20  3 [Ave…      2   1978-10-23     16   3280    200    42\n 9 Buick Ri… 10372    16  3 [Ave…      3.5 1978-07-28     17   3880    207    43\n10 Buick Sk…  4082    19  3 [Ave…      3.5 1978-11-12     13   3400    200    42\n# ℹ 64 more rows\n# ℹ 3 more variables: displacement &lt;dbl&gt;, gear_ratio &lt;dbl&gt;, foreign &lt;dbl+lbl&gt;\n\n\n\nAlways a good idea to have the haven package fully loaded when working with data from Stata. Either directly imported or a previously imported Stata file and saved as intermediate .rds file."
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-variable-labels",
+    "href": "03-importing-data/index.html#stata-variable-labels",
+    "title": "Importing Data in R",
+    "section": "Stata: Variable Labels",
+    "text": "Stata: Variable Labels\n\nhead(auto2$rep78)\n\n&lt;labelled&lt;double&gt;[6]&gt;: Repair record 1978\n[1]  3  3 NA  3  4  3\n\nLabels:\n value     label\n     1      Poor\n     2      Fair\n     3   Average\n     4      Good\n     5 Excellent"
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-using-categorical-variables",
+    "href": "03-importing-data/index.html#stata-using-categorical-variables",
+    "title": "Importing Data in R",
+    "section": "Stata: Using Categorical Variables",
+    "text": "Stata: Using Categorical Variables\n\nauto2 |&gt; \n  filter(rep78 == 1)\n\n# A tibble: 2 × 13\n  make        price   mpg rep78   headroom review_date trunk weight length  turn\n  &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl+l&gt;    &lt;dbl&gt; &lt;date&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;\n1 Olds Starf…  4195    24 1 [Poo…      2   1978-12-17     10   2730    180    40\n2 Pont. Fire…  4934    18 1 [Poo…      1.5 1978-02-02      7   3470    198    42\n# ℹ 3 more variables: displacement &lt;dbl&gt;, gear_ratio &lt;dbl&gt;, foreign &lt;dbl+lbl&gt;"
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-using-categorical-variables-1",
+    "href": "03-importing-data/index.html#stata-using-categorical-variables-1",
+    "title": "Importing Data in R",
+    "section": "Stata: Using Categorical Variables",
+    "text": "Stata: Using Categorical Variables\n\n\n\nauto2 |&gt; \n  count(rep78)\n\n# A tibble: 6 × 2\n  rep78              n\n  &lt;dbl+lbl&gt;      &lt;int&gt;\n1  1 [Poor]          2\n2  2 [Fair]          8\n3  3 [Average]      30\n4  4 [Good]         18\n5  5 [Excellent]    11\n6 NA                 5\n\n\n\n\nauto2 |&gt;\n  mutate(rep78 = as_factor(rep78)) |&gt;\n  count(rep78)\n\n# A tibble: 6 × 2\n  rep78         n\n  &lt;fct&gt;     &lt;int&gt;\n1 Poor          2\n2 Fair          8\n3 Average      30\n4 Good         18\n5 Excellent    11\n6 &lt;NA&gt;          5"
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-accessing-variable-labels",
+    "href": "03-importing-data/index.html#stata-accessing-variable-labels",
+    "title": "Importing Data in R",
+    "section": "Stata: Accessing Variable Labels",
+    "text": "Stata: Accessing Variable Labels\n\nlibrary(labelled)\n\nvar_label(auto2$make)\n\n[1] \"Make and model\"\n\nvar_label(auto2)\n\n$make\n[1] \"Make and model\"\n\n$price\n[1] \"Price\"\n\n$mpg\n[1] \"Mileage (mpg)\"\n\n$rep78\n[1] \"Repair record 1978\"\n\n$headroom\n[1] \"Headroom (in.)\"\n\n$review_date\nNULL\n\n$trunk\n[1] \"Trunk space (cu. ft.)\"\n\n$weight\n[1] \"Weight (lbs.)\"\n\n$length\n[1] \"Length (in.)\"\n\n$turn\n[1] \"Turn circle (ft.)\"\n\n$displacement\n[1] \"Displacement (cu. in.)\"\n\n$gear_ratio\n[1] \"Gear ratio\"\n\n$foreign\n[1] \"Car origin\""
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-exporting-data",
+    "href": "03-importing-data/index.html#stata-exporting-data",
+    "title": "Importing Data in R",
+    "section": "Stata: Exporting Data",
+    "text": "Stata: Exporting Data\n\nwrite_dta(auto2, \"data/auto2_from_r.dta\")\n\nuse auto2_from_r.dta\n\ndes\n--------------------------------------------------------------------------------\nVariable      Storage   Display    Value\n    name         type    format    label      Variable label\n--------------------------------------------------------------------------------\nmake            str17   %-18s                 Make and model\nprice           double  %8.0gc                Price\nmpg             double  %8.0g                 Mileage (mpg)\nrep78           double  %9.0g      rep78      Repair record 1978\nheadroom        double  %6.1f                 Headroom (in.)\nreview_date     double  %td                   \ntrunk           double  %8.0g                 Trunk space (cu. ft.)\nweight          double  %8.0gc                Weight (lbs.)\nlength          double  %8.0g                 Length (in.)\nturn            double  %8.0g                 Turn circle (ft.)\ndisplacement    double  %8.0g                 Displacement (cu. in.)\ngear_ratio      double  %6.2f                 Gear ratio\nforeign         double  %8.0g      foreign    Car origin\n--------------------------------------------------------------------------------"
+  },
+  {
+    "objectID": "03-importing-data/index.html#stata-exporting-data-1",
+    "href": "03-importing-data/index.html#stata-exporting-data-1",
+    "title": "Importing Data in R",
+    "section": "Stata: Exporting Data",
+    "text": "Stata: Exporting Data\nBe careful converting labelled variables to factors and then exporting back to Stata\n\n\nwrite_dta(auto2, \"data/auto2_from_r.dta\")\nuse auto2_from_r.dta\n\ncodebook foreign\n-------------------------------------------------------\nforeign                                      Car origin\n-------------------------------------------------------\n\n                  Type: Numeric (double)\n                 Label: foreign\n\n                 Range: [0,1]                         Units: 1\n         Unique values: 2                         Missing .: 0/74\n\n            Tabulation: Freq.   Numeric  Label\n                           52         0  Domestic\n                           22         1  Foreign\n\n\nauto2 |&gt; \n  mutate(foreign = as_factor(foreign)) |&gt; \n  write_dta(\"data/auto2_factor_version.dta\")\n\nuse auto2_factor_version.dta\n\ncodebook foreign\n-------------------------------------------------------\nforeign                                      Car origin\n-------------------------------------------------------\n\n                  Type: Numeric (long)\n                 Label: foreign\n\n                 Range: [1,2]                         Units: 1\n         Unique values: 2                         Missing .: 0/74\n\n            Tabulation: Freq.   Numeric  Label\n                           52         1  Domestic\n                           22         2  Foreign"
+  },
+  {
     "objectID": "01-intro-to-r/index.html#outline",
     "href": "01-intro-to-r/index.html#outline",
     "title": "Intro to R",
@@ -109,7 +305,7 @@
     "href": "index.html",
     "title": "Data Science Salon",
     "section": "",
-    "text": "Intro to R\n\n\nData Science Salon - Session 1\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nEve Perry\n\n\n\n\n\n\nNo matching items"
+    "text": "Importing Data in R\n\n\nData Science Salon - Session 3\n\n\n\n\n\n\n\n\n\nNov 8, 2023\n\n\nEve Perry\n\n\n\n\n\n\n  \n\n\n\n\nR Basics\n\n\nData Science Salon - Session 2\n\n\n\n\n\n\n\n\n\nOct 25, 2023\n\n\nSara Colom\n\n\n\n\n\n\n  \n\n\n\n\nIntro to R\n\n\nData Science Salon - Session 1\n\n\n\n\n\n\n\n\n\nSep 27, 2023\n\n\nEve Perry\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "02-r-basics/index.html#outline",

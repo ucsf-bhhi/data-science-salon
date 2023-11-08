@@ -1,1 +1,0 @@
-Sitemap: https://ucsf-bhhi.github.io/data-science-salon/sitemap.xml
