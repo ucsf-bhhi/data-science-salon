@@ -1,0 +1,227 @@
+---
+title: "Intro to R"
+subtitle: "Data Science Salon - Session 1"
+author: "Eve Perry"
+date: 2023-09-27
+format: revealjs
+---
+
+## Outline
+
+-   Preview of workshops
+-   R workflow
+-   Differences between R and Stata
+
+# Preview of Workshops
+
+## Planned Workshops
+
+-   R Basics
+-   "Tidy" Data
+-   Data Wrangling in R
+-   Visualizing Data in R
+-   Communicating with R
+-   Modeling with R
+-   Programming with R
+
+# R Workflow
+
+## Whole Game
+
+![Data Science Workflow in R (via [Hadley Wickham](https://r4ds.hadley.nz/whole-game))](https://r4ds.hadley.nz/diagrams/data-science/whole-game.png)
+
+## Import
+
+### Reading in flat files
+
+``` r
+read_csv("example.csv")
+read_dta("example.dta")
+```
+
+### Connect directly to SQL databases
+
+``` r
+con <- DBI::dbConnect(RMariaDB::MariaDB(), group = "my-db")
+tbl(con, "example")
+```
+
+### Fetch data from APIs
+
+``` r
+bhhi_rc_read("EXAMPLE")
+```
+
+## Tidy
+
+### Making messy data neat, so you can use it
+
+::: columns
+::: column
+![Raw Data in Spreadsheet](img/raw-data-spreadsheet.png)
+:::
+
+::: column
+![Tidied Data in R](img/raw-data-spreadsheet.png)
+:::
+:::
+
+## Transform
+
+### Filtering and sorting rows
+
+``` r
+take_home_data |>
+  filter(region == "West") |>
+  arrange(peh_count)
+```
+
+### Adding, changing, and selecting columns
+
+``` r
+take_home_data |>
+  mutate(
+    homelessness_rate = peh_count / population,
+    homelessness_rate = homelessness_rate * 100
+  ) |>
+  select(city, homelessness_rate, average_rent)
+```
+
+## Visualize
+
+::: columns
+::: {.column width="50%"}
+![](img/non_response_flow_chart.png)
+:::
+
+::: {.column width="50%"}
+![](img/RDS-VBS%20Comparison%20Plots.png)
+:::
+:::
+
+## Model
+
+- All the standard regression models and diagnostics
+
+- Cutting edge survey data modeling
+
+- Easy to use machine learning tools
+
+## Communicate {.smaller}
+
+::: columns
+::: {.column width="33%"}
+![Webpage](img/articles-html.png)
+
+![Web Presentations](img/presentations-revealjs.png)
+:::
+
+::: {.column width="33%"}
+![PDF](img/articles-pdf.png)
+
+![Powerpoint](img/presentations-powerpoint.png)
+:::
+
+::: {.column width="33%"}
+![Word Documents](img/articles-msword.png)
+
+![Google Drive](img/googledrive-package-logo.png){width="62.5%"}
+:::
+:::
+
+# Differences Between Stata & R
+
+## Datasets vs. Objects
+
+::: columns
+::: {.column width="50%"}
+### Stata
+
+![](img/stata-dataset.png)
+:::
+
+::: {.column width="50%"}
+### R
+
+![](img/r-objects.png)
+:::
+:::
+
+## Commands vs. Functions
+
+### Stata
+
+``` stata
+sysuse auto
+gen test = 1
+replace mpg = 90
+
+sum test mpg
+```
+
+``` asis
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+        test |         74           1           0          1          1
+         mpg |         74          90           0         90         90
+```
+
+## Commands vs. Functions
+
+### R
+
+```{r}
+library(dplyr)
+cars = tibble(mtcars)
+options(pillar.print_min = 5)
+```
+
+```{r}
+#| echo: true
+mutate(cars, test = 1, mpg = 90)
+```
+
+```{r}
+#| echo: true
+cars
+```
+
+## Commands vs. Functions
+
+### R
+
+```{r}
+#| echo: true
+cars = mutate(cars, test = 1, mpg = 90)
+cars
+```
+
+## Packages
+
+::: columns
+
+::: {.column width="50%"}
+### Stata
+
+``` stata
+ssc install outreg
+```
+:::
+
+::: {.column width="50%"}
+### R
+
+``` r
+install.packages("dplyr")
+library(dplyr)
+```
+:::
+:::
+
+## R Resources for Stata Users
+
+- [Stata to R Cheatsheet, Posit (formerly RStudio)](https://raw.githubusercontent.com/rstudio/cheatsheets/master/stata2r.pdf)
+
+- [R and Stata Equivalencies, Charles Lanfear](https://clanfear.github.io/Stata_R_Equivalency/docs/r_stata_commands.html)
+
+- [R for Stata Users, Matthieu Gomez](https://www.matthieugomez.com/statar/index.html)
