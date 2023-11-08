@@ -2,7 +2,7 @@
 title: "R Basics"
 subtitle: "Data Science Salon - Session 2"
 author: "Sara Colom"
-date: today
+date: "2023-10-25"
 format: revealjs
 ---
 
