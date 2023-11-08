@@ -1,5 +1,6 @@
 ---
 title: "Data Science Salon"
-listing: default
+listing: 
+  sort: "date desc"
 format: bhhi-quarto-html
 ---
