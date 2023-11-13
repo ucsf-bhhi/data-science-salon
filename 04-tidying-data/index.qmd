@@ -10,355 +10,47 @@ format:
 
 ## Outline
 
--   Types of Data
+-   What is tidy data?
+-   Why tidy data?
 -   Useful Packages
--   Examples
+-   Reshaping data 
+-   mutate (transforming variables)
+-   demo
 
 [R for Data Science Chapter 5: Data tidying](https://r4ds.hadley.nz/data-tidy)
 
-# Types of Data
+# What is tidy data?
 
-## General Purpose Flat Files
+`tidy` data is more than just a clean data set, it is data that has been cleaned and transformed so that:
 
-| File Type             | Usual File Extensions | R Packages                                                                                  |
-|-----------------|-----------------|--------------------------------------|
-| Comma Separated (CSV) | `.csv`                | [`readr`](https://readr.tidyverse.org/), base R                                             |
-| Excel Spreadsheets    | `.xls`, `.xlsx`       | [`readxl`](https://readxl.tidyverse.org/) , [`writexl`](https://docs.ropensci.org/writexl/) |
-| Tab Separated         | `.tsv`                | [`readr`](https://readr.tidyverse.org/), base R                                             |
-| Fixed Width           | Varies                | [`readr`](https://readr.tidyverse.org/), base R                                             |
+  - Each variable is a column; each column is a variable.
+  - Each observation is a row; each row is an observation.
+  - Each value is a cell; each cell is a single value.
+  - As a result they follow easy to work with using `tidyverse` syntax (as well as base R)
 
-## Stats Packages Flat Files
+# What is tidy data
 
-| File Type | Usual File Extensions              | R Packages                                      |
-|------------------|-----------------------|-------------------------------|
-| R         | `.rds`                             | [`readr`](https://readr.tidyverse.org/), base R |
-| Stata     | `.dta`                             | [`haven`](https://haven.tidyverse.org/), [`labelled`](https://larmarange.github.io/labelled/)         |
-| SAS       | `.sas7bdat` , `.sas7bcat` , `.xpt` | [`haven`](https://haven.tidyverse.org/)         |
-| SPSS      | `.sav`, `.por`                     | [`haven`](https://haven.tidyverse.org/)         |
+![tidy data](https://r4ds.hadley.nz/images/tidy-1.png)
 
-::: {.notes}
-Exporting data to SAS is tricky. As far as I know it's not possible to create `.sas7bdat` files but it may be possible to create `.xpt` files.
-:::
+# Why tidy data?
 
-## Advanced Data
+  - Consistent data structures facilitate learning and applying tools to work with the data because they have an underlying uniformity (i.e. makes writing and understanding code simpler!)
+  - There's a specific benefit to having each variable as a column because of R's vectorized 'nature to shine'
+    - R's built in functions mainly work with vectors of values, making transforming tidy data a smooth process. 
 
--   Google Sheets: [`googlesheets4`](https://googlesheets4.tidyverse.org/) package
 
--   Google Drive: [`googledrive`](https://googledrive.tidyverse.org/) package
-
--   Databases: [`dbplyr`](https://dbplyr.tidyverse.org/) package, [`DBI`](https://dbi.r-dbi.org/) package
-
--   APIs
-
-    -   General Use: [`httr`](https://httr.r-lib.org/), [`httr2`](https://httr2.r-lib.org/) packages
-
-    -   Specific APIs: [`REDCapR`](https://ouhscbbmc.github.io/REDCapR/) and other packages
-
--   Web Scraping: [`rvest`](https://rvest.tidyverse.org/) package
-
-# Examples
-
-## CSV: Initial Import {.smaller}
-
-### Raw Data
-
-``` asis
-Student ID,Full Name,favourite.food,mealPlan,AGE,DOB
-1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4,10/26/2019
-2,Barclay Lynn,French fries,Lunch only,5,3/14/2018
-3,Jayendra Lyne,N/A,Breakfast and lunch,7,7/15/2016
-4,Leon Rossini,Anchovies,Lunch only,,
-5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five,9/14/2018
-6,Güvenç Attila,Ice cream,Lunch only,6,1/23/2019
-```
-
-```{r}
-library(readr)
-students <- read_csv("data/students.csv") 
-
-students
-```
-
-::: {.notes}
-Note the special variable names and explain the \`\`
-:::
-
-## CSV: Fix Variable Names with `dplyr::rename()` {.smaller}
-
-```{r}
-library(dplyr)
-
-students <- read_csv("data/students.csv") |> 
-  rename(
-    student_id = `Student ID`,
-    full_name = `Full Name`,
-    favorite_food = favourite.food,
-    meal_plan = mealPlan,
-    age = AGE
-  )
-
-students
-```
-
-## CSV: Fix Variable Names with `janitor::clean_names()` {.smaller}
-
-```{r}
-library(janitor)
-
-students <- read_csv("data/students.csv") |> 
-  clean_names()
-
-students
-```
-
-## CSV: Files Without Variable Names {.smaller}
-
-``` asis
-1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-2,Barclay Lynn,French fries,Lunch only,5
-3,Jayendra Lyne,N/A,Breakfast and lunch,7
-4,Leon Rossini,Anchovies,Lunch only,
-5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-6,Güvenç Attila,Ice cream,Lunch only,6
-```
-
-. . .
-
-```{r}
-students <- read_csv(
-  "data/students_no_variable_names.csv",
-  col_names = c("student_id", "full_name", "favorite_food", "meal_plan", "age", "dob")
-)
-
-students
-```
-
-## CSV: Missing Data {.smaller}
-
-### Raw Data
-
-``` asis
-Student ID,Full Name,favourite.food,mealPlan,AGE
-1,Sunil Huffmann,Strawberry yoghurt,Lunch only,4
-2,Barclay Lynn,French fries,Lunch only,5
-3,Jayendra Lyne,N/A,Breakfast and lunch,7
-4,Leon Rossini,Anchovies,Lunch only,
-5,Chidiegwu Dunkel,Pizza,Breakfast and lunch,five
-6,Güvenç Attila,Ice cream,Lunch only,6
-```
-
-```{r}
-students
-```
-
-::: {.notes}
-By default, only "" is treated as N/A
-:::
-
-## CSV: Missing Data {.smaller}
-
-```{r}
-students <- read_csv("data/students.csv", na = c("N/A", "")) |> 
-  clean_names()
-
-students
-```
-
-::: {.notes}
-If you specify other NA values, then you have to explicitly specify ""
-:::
-
-## CSV: Variable Types {.smaller}
-
-```{r}
-#| echo: false
-students
-```
-
-::: {.notes}
-Note that `dob` is imported as a string variable and `meal_plan` might be more useful as a factor.
-:::
-
-## CSV: Variable Types {.smaller}
-
-```{r}
-students <- read_csv(
-  "data/students.csv",
-  na = c("N/A", ""),
-  col_types = cols(mealPlan = col_factor(), DOB = col_date(format = "%m/%d/%Y"))
-) |> 
-  clean_names()
-
-students
-```
-
-::: {.notes}
-Note that you have to use the variable names as they appear in the raw data to specify types.
-:::
-
-## CSV: Exporting Data {.smaller}
-
-```{r}
-write_csv(students, "data/students_clean.csv")
-
-read_csv("data/students_clean.csv")
-```
-
-::: {.notes}
-We lose the factor, but keep the data b/c `readr` writes dates in CSVs in the way that it automatically recognizes them during import.
-:::
-
-```{r}
-#| echo: FALSE
-unlink("data/students_clean.csv")
-```
-
-## Excel: Initial Import {.smaller}
-
-```{r}
-library(readxl)
-
-read_excel("data/students.xlsx")
-```
-
-## Excel: Multiple Tabs {.smaller}
-
-```{r}
-read_excel("data/students.xlsx", sheet = "Student List")
-```
-
-## Excel: Specify Column Names {.smaller}
-
-```{r}
-read_excel(
-  "data/students.xlsx",
-  col_names = c("student_id", "full_name", "favorite_food", "meal_plan", "age", "dob"),
-  skip = 1
-)
-```
-
-## Excel: Variable Types & Missing Data
-
-```{r}
-excel_students = read_excel(
-  "data/students.xlsx",
-  col_types = c("text", "guess", "guess", "skip", "guess", "date"),
-  na = c("", "N/A")
-) |> 
-  clean_names()
-
-excel_students
-```
-
-::: {.notes}
-Unlike CSVs if you want to specify one variable's type, you have to specify all of them.
-:::
-
-## Excel: A Warning About Dates
-
-```{r}
-read_excel(
-  "data/students.xlsx",
-  col_types = c("text", "guess", "guess", "skip", "guess", "text"),
-  na = c("", "N/A")
-) |> 
-  clean_names()
-```
-
-## Excel: Exporting Data
-
-```{r}
-library(writexl)
-
-write_xlsx(excel_students, "data/students_clean.xlsx")
-
-read_excel("data/students_clean.xlsx")
-```
-
-
-```{r}
-#| echo: false
-unlink("data/students_clean.xlsx")
-```
-
-## RDS: R's storage format
-
-```{r}
-write_rds(students, "data/students_clean.rds")
-
-students_rds <- read_rds("data/students_clean.rds")
-
-students_rds
-```
-
-```{r}
-#| echo: false
-unlink("data/students_clean.rds")
-```
-
-:::{.notes}
-RDS just saves an R object to disk as it currently exists. When you read it back in have to assign it to an object.
-Note that there are other less common and more specialized R storage formats that you might encounter.
-:::
-
-## Stata: Initial Import {.smaller}
-
-``` asis
---------------------------------------------------------------------------------
-Variable      Storage   Display    Value
-    name         type    format    label      Variable label
---------------------------------------------------------------------------------
-make            str18   %-18s                 Make and model
-price           int     %8.0gc                Price
-mpg             int     %8.0g                 Mileage (mpg)
-rep78           int     %9.0g      repair     Repair record 1978
-headroom        float   %6.1f                 Headroom (in.)
-review_date     float   %td                   
-trunk           int     %8.0g                 Trunk space (cu. ft.)
-weight          int     %8.0gc                Weight (lbs.)
-length          int     %8.0g                 Length (in.)
-turn            int     %8.0g                 Turn circle (ft.)
-displacement    int     %8.0g                 Displacement (cu. in.)
-gear_ratio      float   %6.2f                 Gear ratio
-foreign         byte    %8.0g      origin     Car origin
---------------------------------------------------------------------------------
-```
-
-## Stata: Initial Import {.smaller}
-
-```{r}
-library(haven)
-
-auto2 = read_dta("data/auto2.dta")
-
-auto2
-```
-
-::: {.notes}
-Always a good idea to have the `haven` package fully loaded when working with data from Stata. Either directly imported or a previously imported Stata file and saved as intermediate `.rds` file.
-:::
-
-## Stata: Variable Labels
-
-```{r}
-head(auto2$rep78)
-```
-
-## Stata: Using Categorical Variables {.smaller}
-
-```{r}
-auto2 |> 
-  filter(rep78 == 1)
-```
-
-## Stata: Using Categorical Variables
+## Examples
 
 ::: columns
 ::: {.column width="50%"}
 
 ```{r}
-auto2 |> 
-  count(rep78)
+dplyr::tibble(
+  country = c("Afghanistan", "Afghanistan", "Afghanistan", "Afghanistan"),
+  year = c(1999, 1999, 2000, 2000),
+  type = c("cases", "population", "cases", "population"),
+  count = c(745, 19987071, 2666, 20595360)
+)
 ```
 
 :::
@@ -366,122 +58,68 @@ auto2 |>
 :::{.column width="50%"}
 
 ```{r}
-auto2 |>
-  mutate(rep78 = as_factor(rep78)) |>
-  count(rep78)
+dplyr::tibble(
+  country = c("Afghanistan", "Afghanistan", "Brazil", "Brazil", "China", "China"),
+  year = c(1999, 2000, 1999, 2000, 1999, 2000),
+  cases = c(745, 2666, 37737, 80488, 212258, 213766),
+  population = c(19987071, 20595360, 172006362, 174504898, 1272915272, 1280428583)
+)
 ```
 
 :::
 :::
-## Stata: Accessing Variable Labels
+
+# Useful packages
+
+  - `ggplot2` and `dplyr`
+  - These packages are readily usable with `tidyverse`
+  - Install with `install.packages()`
+
+# Reshaping data
+
+  - `pivot_longer` (go from wide to long format)
+  - `pivot_wider` (go from long to wide format)
+
+# Pivot longer
+
+  
+```{r}
+data("USArrests")
+
+head(USArrests)
+```
+
+# Pivot longer
 
 ```{r}
-library(labelled)
-
-var_label(auto2$make)
-
-var_label(auto2)
+USArrests |> 
+  dplyr::select(Rape, Murder, Assault) |> 
+  tidyr::pivot_longer(all_of(c("Rape", "Murder", "Assault")), names_to = "crime_type", values_to = "count") |> 
+  head()
 ```
 
-## Stata: Exporting Data {.smaller}
+# Pivot longer
 
 ```{r}
-write_dta(auto2, "data/auto2_from_r.dta")
+USArrests |> 
+  tidyr::pivot_longer(all_of(c("Rape", "Murder", "Assault")), names_to = "crime_type", values_to = "count") |> 
+  dplyr::group_by(crime_type) |> 
+  dplyr::summarise(total_reported = sum(count))
 ```
 
-``` stata
-use auto2_from_r.dta
-
-des
+```{r, include = F, echo = F, message = F, warning = F}
+iris_long <- iris |> 
+  janitor::clean_names() |> 
+  tidyr::pivot_longer(sepal_length:petal_width, names_to = "measurement") |> 
+  dplyr::mutate(id = 1:dplyr::n()) |> 
+  dplyr::relocate(id)
 ```
-
-``` asis
---------------------------------------------------------------------------------
-Variable      Storage   Display    Value
-    name         type    format    label      Variable label
---------------------------------------------------------------------------------
-make            str17   %-18s                 Make and model
-price           double  %8.0gc                Price
-mpg             double  %8.0g                 Mileage (mpg)
-rep78           double  %9.0g      rep78      Repair record 1978
-headroom        double  %6.1f                 Headroom (in.)
-review_date     double  %td                   
-trunk           double  %8.0g                 Trunk space (cu. ft.)
-weight          double  %8.0gc                Weight (lbs.)
-length          double  %8.0g                 Length (in.)
-turn            double  %8.0g                 Turn circle (ft.)
-displacement    double  %8.0g                 Displacement (cu. in.)
-gear_ratio      double  %6.2f                 Gear ratio
-foreign         double  %8.0g      foreign    Car origin
---------------------------------------------------------------------------------
-```
-
-## Stata: Exporting Data {.smaller}
-
-**Be careful converting labelled variables to factors and then exporting back to Stata**
-
-::: columns
-::: {.column width="50%"}
-```r
-write_dta(auto2, "data/auto2_from_r.dta")
-```
-
-```stata
-use auto2_from_r.dta
-
-codebook foreign
-```
-
-```asis
--------------------------------------------------------
-foreign                                      Car origin
--------------------------------------------------------
-
-                  Type: Numeric (double)
-                 Label: foreign
-
-                 Range: [0,1]                         Units: 1
-         Unique values: 2                         Missing .: 0/74
-
-            Tabulation: Freq.   Numeric  Label
-                           52         0  Domestic
-                           22         1  Foreign
-```
-:::
-
-::: {.column width="50%"}
-```{r}
-auto2 |> 
-  mutate(foreign = as_factor(foreign)) |> 
-  write_dta("data/auto2_factor_version.dta")
-```
-
-```stata
-use auto2_factor_version.dta
-
-codebook foreign
-```
-
-```asis
--------------------------------------------------------
-foreign                                      Car origin
--------------------------------------------------------
-
-                  Type: Numeric (long)
-                 Label: foreign
-
-                 Range: [1,2]                         Units: 1
-         Unique values: 2                         Missing .: 0/74
-
-            Tabulation: Freq.   Numeric  Label
-                           52         1  Domestic
-                           22         2  Foreign
-```
-:::
-:::
+# Pivot wider
 
 ```{r}
-#| echo: false
-unlink(c("data/auto2_factor_version.dta", "data/auto2_from_r.dta"))
+iris_long |> 
+  tidyr::pivot_wider(names_from = measurement, values_from = value)
 ```
 
+# Transforming variables with `mutate`  
+  
