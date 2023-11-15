@@ -79,8 +79,20 @@ dplyr::tibble(
 
   - `pivot_longer` (go from wide to long format)
   - `pivot_wider` (go from long to wide format)
+  
+# Reshaping data
+
+![pivot long](https://r4ds.hadley.nz/diagrams/tidy-data/variables.png)
 
 # Pivot longer
+
+  - 3 main arguments _aside_ from the data, `cols` = specify the columns to pivot, `names_to` = what you want to call the new column that stores the variable name, and `values_to`= the name you want to call the new column that stores the column's input.
+  - After the data, `cols` is the only necessary argument to specify
+  - By default `pivot_longer` names the variable with variable names as `name` and the values column to `value`
+  
+  
+
+# Example: Pivot longer
 
   
 ```{r}
@@ -89,7 +101,7 @@ data("USArrests")
 head(USArrests)
 ```
 
-# Pivot longer
+# Example: Pivot longer
 
 ```{r}
 USArrests |> 
@@ -98,7 +110,7 @@ USArrests |>
   head()
 ```
 
-# Pivot longer
+# Example: Pivot longer
 
 ```{r}
 USArrests |> 
@@ -114,7 +126,60 @@ iris_long <- iris |>
   dplyr::mutate(id = 1:dplyr::n()) |> 
   dplyr::relocate(id)
 ```
+
+# What if data is stored in the variable name?
+
+[!pivot longer--using variable name as data](https://r4ds.hadley.nz/diagrams/tidy-data/multiple-names.png)
+
+# What if data is stored in the variable name?
+
+  - To solve this problem we need to supply a vector to `names_to` but this time we use the special `.value` sentinel.
+
+  - This isn’t the name of a variable but a unique value that tells `pivot_longer()` to do something different. 
+
+  - This overrides the usual values_to argument to use the first component of the pivoted column name as a variable name in the output.
+
+```{r, include = F}
+household <- dplyr::tibble(
+  family = 1:5,
+  year_child1 = c(1989, 1972, 1988, 1992, 2001),
+  year_child2 = c(1999, 1982, 1993, 1993, 2003),
+  name_child1 = c("Jenna", "Eve", "Kim", "Sila", "Mai See"),
+  name_child2 = c("Sara", "Dave", "Kenny", "Margo", "Gina")
+)
+```
+  
+# Example: Pivot longer
+
+```{r}
+household
+```
+
+# Example: Pivot longer
+
+```{r}
+household |> 
+  tidyr::pivot_longer(
+    cols = !family, 
+    names_to = c(".value", "child"), 
+    names_sep = "_", 
+    values_drop_na = TRUE
+  )
+```
+
+
 # Pivot wider
+
+  - After data, there are three main arguments to specify, 1) `names_from` = specify which variable contains information that should be used to label the new variables, `values_from` = specify what variable to use to populate the new variables
+
+# Example: Pivot wider
+
+```{r}
+iris_long |> 
+  head()
+```
+
+# Example: Pivot wider
 
 ```{r}
 iris_long |> 
@@ -122,4 +187,6 @@ iris_long |>
 ```
 
 # Transforming variables with `mutate`  
+
+
   
