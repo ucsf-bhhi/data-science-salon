@@ -14,7 +14,7 @@ format:
 -   Why tidy data?
 -   Useful Packages
 -   Reshaping data 
--   mutate (transforming variables)
+-   dplyr::mutate (transforming variables)
 -   demo
 
 [R for Data Science Chapter 5: Data tidying](https://r4ds.hadley.nz/data-tidy)
@@ -186,7 +186,78 @@ iris_long |>
   tidyr::pivot_wider(names_from = measurement, values_from = value)
 ```
 
-# Transforming variables with `mutate`  
+# Transforming variables with `dplyr::mutate`  
 
-
+  - `dplyr::mutate` allows you to create, modify, and delete columns in an existing data frame.
+  - `dplyr::mutate` also allows you to create/modify columns that are functions of existing variables.
   
+# Example: dplyr::mutate
+
+Convert between data types
+
+```{r}
+iris <- iris |> 
+  janitor::clean_names()
+
+iris |> 
+  str()
+```
+
+# Example: dplyr::mutate
+
+Convert between data types
+
+```{r}
+iris <- iris |> 
+  dplyr::mutate(species = as.character(species))
+```
+
+# Example: dplyr::mutate
+
+Convert between data types
+
+```{r}
+iris |> 
+  str()
+```
+
+# Example dplyr::mutate
+
+Create variable based on pre-existing variable.
+
+```{r}
+iris <- iris |> 
+  dplyr::mutate(sepal_length_2_fold = sepal_length*2)
+
+iris |> 
+  head()
+```
+
+# Example: dplyr::mutate
+
+Overwrite pre-existing variable
+
+```{r}
+iris |> 
+  dplyr::count(species)
+```
+
+
+# Example: dplyr::mutate
+
+Overwrite pre-existing variable
+
+```{r}
+iris <- iris |> 
+  dplyr::mutate(species = dplyr::if_else(species == "setosa", "setosa", "species_other"))
+```
+
+
+# Example: dplyr::mutate
+
+Overwrite pre-existing variable
+
+```{r}
+iris |> 
+  dplyr::count(species)
+```
