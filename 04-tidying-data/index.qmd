@@ -1,5 +1,5 @@
 ---
-title: "Importing Data in R"
+title: "Tidy Data R"
 subtitle: "Data Science Salon - Session 3"
 author: "Sara Colom"
 date: "2023-11-22"
@@ -14,8 +14,8 @@ format:
 -   Why tidy data?
 -   Useful Packages
 -   Reshaping data 
--   dplyr::mutate (transforming variables)
--   demo
+-   `dplyr::mutate` (transforming variables)
+
 
 [R for Data Science Chapter 5: Data tidying](https://r4ds.hadley.nz/data-tidy)
 
@@ -27,8 +27,6 @@ format:
   - Each observation is a row; each row is an observation.
   - Each value is a cell; each cell is a single value.
   - As a result they follow easy to work with using `tidyverse` syntax (as well as base R)
-
-# What is tidy data
 
 ![tidy data](https://r4ds.hadley.nz/images/tidy-1.png)
 
@@ -129,7 +127,9 @@ iris_long <- iris |>
 
 # What if data is stored in the variable name?
 
+
 [!pivot longer--using variable name as data](https://r4ds.hadley.nz/diagrams/tidy-data/multiple-names.png)
+
 
 # What if data is stored in the variable name?
 
@@ -137,7 +137,7 @@ iris_long <- iris |>
 
   - This isn’t the name of a variable but a unique value that tells `pivot_longer()` to do something different. 
 
-  - This overrides the usual values_to argument to use the first component of the pivoted column name as a variable name in the output.
+  - This overrides the usual `values_to` argument to use the first component of the pivoted column name as a variable name in the output.
 
 ```{r, include = F}
 household <- dplyr::tibble(
@@ -191,6 +191,18 @@ iris_long |>
   - `dplyr::mutate` allows you to create, modify, and delete columns in an existing data frame.
   - `dplyr::mutate` also allows you to create/modify columns that are functions of existing variables.
   
+# mutate
+
+  - After data, mutate function is expecting you to provide one or more clauses where you indicate the name of the variable you want to create on the left hand side of the `=` sign,
+  and the value to give it on the right hand side
+  - Note, the value has to be either the length of `1` or the same length as there are rows in the data
+
+# mutate
+
+  - You can hard code the values or use one or more functions to obtain them
+    - `data |> mutate(new_variable = c("value 1", "value 2"))`
+    - `data |> mutate(new_variable = existing_Variable + 10)`
+  
 # Example: dplyr::mutate
 
 Convert between data types
@@ -209,7 +221,7 @@ Convert between data types
 
 ```{r}
 iris <- iris |> 
-  dplyr::mutate(species = as.character(species))
+  dplyr::mutate(species_as_chrt = as.character(species))
 ```
 
 # Example: dplyr::mutate
@@ -230,6 +242,7 @@ iris <- iris |>
   dplyr::mutate(sepal_length_2_fold = sepal_length*2)
 
 iris |> 
+  dplyr::select(sepal_length, sepal_length_2_fold) |> 
   head()
 ```
 
