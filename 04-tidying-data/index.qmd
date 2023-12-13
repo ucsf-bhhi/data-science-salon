@@ -2,7 +2,7 @@
 title: "Tidy Data R"
 subtitle: "Data Science Salon - Session 3"
 author: "Sara Colom"
-date: "2023-11-22"
+date: "2023-12-13"
 format: 
   revealjs:
     echo: true
@@ -15,6 +15,7 @@ format:
 -   Useful Packages
 -   Reshaping data 
 -   `dplyr::mutate` (transforming variables)
+- Using `janitor` & `stringr` to tidy data
 
 
 [R for Data Science Chapter 5: Data tidying](https://r4ds.hadley.nz/data-tidy)
@@ -27,6 +28,8 @@ format:
   - Each observation is a row; each row is an observation.
   - Each value is a cell; each cell is a single value.
   - As a result they follow easy to work with using `tidyverse` syntax (as well as base R)
+
+# tidy data
 
 ![tidy data](https://r4ds.hadley.nz/images/tidy-1.png)
 
@@ -71,6 +74,7 @@ dplyr::tibble(
 
   - `ggplot2` and `dplyr`
   - These packages are readily usable with `tidyverse`
+  - Other favorites: `stringr` and `janitor`
   - Install with `install.packages()`
 
 # Reshaping data
@@ -273,4 +277,62 @@ Overwrite pre-existing variable
 ```{r}
 iris |> 
   dplyr::count(species)
+```
+
+
+# stringr
+
+The `stringr` package is a wonderful package that has a bunch of tools that help you work with `character` strings.
+Some of my favorite functions:
+
+  - `str_replace_all` allows you to replace a substring with another substring value based on partial string matching
+  - `str_remove` similar to `str_replace_all` except it removes the string that matches the pattern.
+  
+# Example stringr_replace_all
+
+  - Specify three arguments, 1) the string to modify, 2) the string pattern to match for replacement, 3) replacement string
+
+```{r}
+x <- c("intervention_1", "intervention_2", "intervention_3")
+
+x
+
+stringr::str_replace_all(x, "intervention", "inter")
+```
+
+
+# Example stringr_replace_all
+
+  - Specify two arguments, 1) the string to modify, 2) the string pattern to match for removal
+
+```{r}
+stringr::str_remove(x, "intervention_")
+```
+
+
+# janitor
+
+`janitor` package has a bunch of useful tools to quickly tidy up the data.
+My favorite functions include,
+
+  - `clean_names` function to tidy data set variable names, sets them to `snake_case`
+  - `remove_empty` function to drop rows and/or data columns that have an entire row and/or column of missing data
+  
+# Example remove_empty
+
+  - Specify two arguments, 1) data set to modify, 2) whether to remove by rows, columns, or both (default)
+
+```{r}
+fake_data <- dplyr::tibble(
+  x = c(NA, 1, 2, 4, NA, NA)
+)
+
+fake_data
+```
+
+# Example remove_empty
+
+```{r}
+fake_data |> 
+  janitor::remove_empty(which = c("rows"))
 ```
