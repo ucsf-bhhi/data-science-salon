@@ -1,0 +1,169 @@
+---
+title: "Tidy Data R"
+subtitle: "Data Science Salon - Session 6"
+author: "Sara Colom"
+date: "2024-01-31"
+format: 
+  revealjs:
+    echo: true
+---
+
+## Outline
+
+-   Scripts
+-   Best practices for scripts
+-   Keyboard shortkeys
+-   Rstudio diagnostics
+-   R Projects/git
+-   Useful Packages
+-   Demo
+
+
+
+[R for Data Science Chapter 6: Workflow: scripts & projects](https://r4ds.hadley.nz/workflow-scripts)
+
+# Preface
+
+This workshop will introduce you to two essential tools for organizing your code in R: **scripts** and **projects**
+Further, I will also discuss a bit of how to integrate git when you have an R project and keep track of version histories
+
+# Scripts
+
+  - R files that execute one or more lines of code (ext. **.R**)
+  - Created to run specific tasks, ideally organized by project and task performed
+  - R scripts can be easily edited in R studio's text editor, where you can run code and visualize output on the fly
+  - Rstudio can automatically do code syntax highlighting and color parenthesis to make it easy to edit code 
+  - Rstudio also checks for errors in code syntax which makes fixes issues related to syntax easy!
+
+
+![Editing R file in Rstudio](https://r4ds.hadley.nz/diagrams/rstudio/script.png)
+
+# Best practices
+
+- keep separate files for groups of code that perform similar tasks
+- If multiple files depend on the same lines of code to work correctly, save a file(s) with this shared code and call it in the files it depends on with `source()` 
+  - **Don't** copy and paste the same code over and over across various files--hard to track and more error prone
+  - If R files have a specific order they should run in, add a prefix that helps ID the order, e.g., `01_functions.R`, `02_functions.R` etc.
+  
+# More on file naming
+
+- File names should be **machine** readable: avoid spaces, symbols, and special characters
+- File names should be **human** readable: use file names to describe what 's in the file
+  - "01_read_in_data.R", "02_rename_vars.R"
+- File names should play well with default ordering: start the file name with numbers so that they get sorted correctly alphabetically
+
+# Example
+
+```r
+01-load-data.R
+02-exploratory-analysis.R
+03-model-approach-1.R
+04-model-approach-2.R
+fig-01.png
+fig-02.png
+report-2022-03-20.qmd
+report-2022-04-02.qmd
+report-draft-notes.txt
+```
+
+# Best practices (settings)
+
+- Ideally, you run code with a blank slate ea/ time (i.e. you should start with a blank workspace between R sessions)
+- You should be able to rely on your R scripts to reliably execute code each time (this helps ensure project and code is reproducible)
+- Make sure that the `Restore .RData workspace at startup` is disabled (this is under General in the Rstudio setting options)
+
+![](https://r4ds.hadley.nz/diagrams/rstudio/clean-slate.png)
+  
+# Keyboard shortcuts 
+
+  - `cntrl` + `shift` + `n` --> opens a new R script file
+  - `cntrl` + `shift` + `m` --> adds a `|>` symbol
+
+
+# RStudio diagnostics
+
+  - In the script editor, RStudio highlights syntax errors with a red squiggly line and a cross in the side bar
+
+![Error shown](https://r4ds.hadley.nz/screenshots/rstudio-diagnostic.png)
+
+# RStudio diagnostics
+
+  - Hover over the cross to see what the problem is
+
+![Error description](https://r4ds.hadley.nz/screenshots/rstudio-diagnostic-tip.png)
+
+# RStudio will also let you know about potential problems
+
+![Warning message](https://r4ds.hadley.nz/screenshots/rstudio-diagnostic-warn.png)
+
+# Projects
+
+# Projects
+
+  - Nice setup in R that allows you to keep all files associated with a given project together in one directory
+  - R projects allow you to use relative paths making writing code easy and reproducible when you work with many files and collaborate with team members
+  
+# Making an R Project
+
+  - Click File > New Project (choose between existing or new directory)
+  - Give your project  Name, select create a git repository and click on Create Project
+
+![](https://r4ds.hadley.nz/diagrams/new-project.png)
+
+# Making an R Project
+
+- Think carefully about which subdirectory you put your project in
+  - Projects should be stored somewhere easy to find and sensible for relating project files back to a general location
+  - I like to store my project in project specific subfolders within a main folder called *BHHI** in my Desktop
+- You can check the "home" location of your project with `getwd()`
+
+```{r}
+getwd()
+```
+
+# Relative and absolute paths
+
+- Once you are inside a project, you should _only_ use relative paths **not** absolute paths
+  - Relative path is relative to the working directory, so you will call all files based on where the Rproj file lives
+  
+  
+# Relative and absolute paths
+
+  - Absolute paths point to the same place regardless of your working directory and look different depending on OS
+  - Never use absolute paths because they are specific to your computer and computing environment, and it will hinder sharing (no else has the same exact directory configuration as you)
+  - Other alternatives when sharing include creating a common environmental variable, e.g., BHHI_PATH that points to the same shared folder, but you just need to make sure everyone is using the SAME name for the same folder path
+  
+# git
+
+- When you create an R project as previously mentioned, you automatically initialize a git repo
+- With Rstudio you can commit changes, it is advised to mark you **first commit** before adding anything to the project
+- To **commit** click on the `Git` button on the upper right hand side of Rstudio, then click on on the `commit` button
+- In the window that pops up, type in **first commit** in the upper right box and then click `commit`
+
+
+# git
+
+- `commit` often and meaningfully, this way you can track your changes in a way that it is easy for you to revert to a specific version of the project if needed etc.
+- When you are satisfied with your updates--push to a remote repo
+- Before pushing to a remote repo, you should establish one by going into github.com, clicking on New button
+- Create a repo name, no special characters and use "_" or "-" to separate words
+- Click on Create repository
+
+# git
+
+- Follow instructions beneath ..or push an existing repository from the command line
+- I do this in the terminal--migrate to your working directory with cd, e.g., cd `Desktop/BHHI/demo`
+- copy and paste the prompts
+- you can confirm the remote repo with `git remote -v`
+
+# Create a README 
+
+- 
+
+# Reccomended packages
+
+
+
+
+  
+

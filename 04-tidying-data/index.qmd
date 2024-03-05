@@ -1,0 +1,338 @@
+---
+title: "Tidy Data R"
+subtitle: "Data Science Salon - Session 3"
+author: "Sara Colom"
+date: "2023-12-13"
+format: 
+  revealjs:
+    echo: true
+---
+
+## Outline
+
+-   What is tidy data?
+-   Why tidy data?
+-   Useful Packages
+-   Reshaping data 
+-   `dplyr::mutate` (transforming variables)
+- Using `janitor` & `stringr` to tidy data
+
+
+[R for Data Science Chapter 5: Data tidying](https://r4ds.hadley.nz/data-tidy)
+
+# What is tidy data?
+
+`tidy` data is more than just a clean data set, it is data that has been cleaned and transformed so that:
+
+  - Each variable is a column; each column is a variable.
+  - Each observation is a row; each row is an observation.
+  - Each value is a cell; each cell is a single value.
+  - As a result they follow easy to work with using `tidyverse` syntax (as well as base R)
+
+# tidy data
+
+![tidy data](https://r4ds.hadley.nz/images/tidy-1.png)
+
+# Why tidy data?
+
+  - Consistent data structures facilitate learning and applying tools to work with the data because they have an underlying uniformity (i.e. makes writing and understanding code simpler!)
+  - There's a specific benefit to having each variable as a column because of R's vectorized 'nature to shine'
+    - R's built in functions mainly work with vectors of values, making transforming tidy data a smooth process. 
+
+
+## Examples
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+dplyr::tibble(
+  country = c("Afghanistan", "Afghanistan", "Afghanistan", "Afghanistan"),
+  year = c(1999, 1999, 2000, 2000),
+  type = c("cases", "population", "cases", "population"),
+  count = c(745, 19987071, 2666, 20595360)
+)
+```
+
+:::
+
+:::{.column width="50%"}
+
+```{r}
+dplyr::tibble(
+  country = c("Afghanistan", "Afghanistan", "Brazil", "Brazil", "China", "China"),
+  year = c(1999, 2000, 1999, 2000, 1999, 2000),
+  cases = c(745, 2666, 37737, 80488, 212258, 213766),
+  population = c(19987071, 20595360, 172006362, 174504898, 1272915272, 1280428583)
+)
+```
+
+:::
+:::
+
+# Useful packages
+
+  - `ggplot2` and `dplyr`
+  - These packages are readily usable with `tidyverse`
+  - Other favorites: `stringr` and `janitor`
+  - Install with `install.packages()`
+
+# Reshaping data
+
+  - `pivot_longer` (go from wide to long format)
+  - `pivot_wider` (go from long to wide format)
+  
+# Reshaping data
+
+![pivot long](https://r4ds.hadley.nz/diagrams/tidy-data/variables.png)
+
+# Pivot longer
+
+  - 3 main arguments _aside_ from the data, `cols` = specify the columns to pivot, `names_to` = what you want to call the new column that stores the variable name, and `values_to`= the name you want to call the new column that stores the column's input.
+  - After the data, `cols` is the only necessary argument to specify
+  - By default `pivot_longer` names the variable with variable names as `name` and the values column to `value`
+  
+  
+
+# Example: Pivot longer
+
+  
+```{r}
+data("USArrests")
+
+head(USArrests)
+```
+
+# Example: Pivot longer
+
+```{r}
+USArrests |> 
+  dplyr::select(Rape, Murder, Assault) |> 
+  tidyr::pivot_longer(all_of(c("Rape", "Murder", "Assault")), names_to = "crime_type", values_to = "count") |> 
+  head()
+```
+
+# Example: Pivot longer
+
+```{r}
+USArrests |> 
+  tidyr::pivot_longer(all_of(c("Rape", "Murder", "Assault")), names_to = "crime_type", values_to = "count") |> 
+  dplyr::group_by(crime_type) |> 
+  dplyr::summarise(total_reported = sum(count))
+```
+
+```{r, include = F, echo = F, message = F, warning = F}
+iris_long <- iris |> 
+  janitor::clean_names() |> 
+  tidyr::pivot_longer(sepal_length:petal_width, names_to = "measurement") |> 
+  dplyr::mutate(id = 1:dplyr::n()) |> 
+  dplyr::relocate(id)
+```
+
+# What if data is stored in the variable name?
+
+
+[!pivot longer--using variable name as data](https://r4ds.hadley.nz/diagrams/tidy-data/multiple-names.png)
+
+
+# What if data is stored in the variable name?
+
+  - To solve this problem we need to supply a vector to `names_to` but this time we use the special `.value` sentinel.
+
+  - This isn’t the name of a variable but a unique value that tells `pivot_longer()` to do something different. 
+
+  - This overrides the usual `values_to` argument to use the first component of the pivoted column name as a variable name in the output.
+
+```{r, include = F}
+household <- dplyr::tibble(
+  family = 1:5,
+  year_child1 = c(1989, 1972, 1988, 1992, 2001),
+  year_child2 = c(1999, 1982, 1993, 1993, 2003),
+  name_child1 = c("Jenna", "Eve", "Kim", "Sila", "Mai See"),
+  name_child2 = c("Sara", "Dave", "Kenny", "Margo", "Gina")
+)
+```
+  
+# Example: Pivot longer
+
+```{r}
+household
+```
+
+# Example: Pivot longer
+
+```{r}
+household |> 
+  tidyr::pivot_longer(
+    cols = !family, 
+    names_to = c(".value", "child"), 
+    names_sep = "_", 
+    values_drop_na = TRUE
+  )
+```
+
+
+# Pivot wider
+
+  - After data, there are three main arguments to specify, 1) `names_from` = specify which variable contains information that should be used to label the new variables, `values_from` = specify what variable to use to populate the new variables
+
+# Example: Pivot wider
+
+```{r}
+iris_long |> 
+  head()
+```
+
+# Example: Pivot wider
+
+```{r}
+iris_long |> 
+  tidyr::pivot_wider(names_from = measurement, values_from = value)
+```
+
+# Transforming variables with `dplyr::mutate`  
+
+  - `dplyr::mutate` allows you to create, modify, and delete columns in an existing data frame.
+  - `dplyr::mutate` also allows you to create/modify columns that are functions of existing variables.
+  
+# mutate
+
+  - After data, mutate function is expecting you to provide one or more clauses where you indicate the name of the variable you want to create on the left hand side of the `=` sign,
+  and the value to give it on the right hand side
+  - Note, the value has to be either the length of `1` or the same length as there are rows in the data
+
+# mutate
+
+  - You can hard code the values or use one or more functions to obtain them
+    - `data |> mutate(new_variable = c("value 1", "value 2"))`
+    - `data |> mutate(new_variable = existing_Variable + 10)`
+  
+# Example: dplyr::mutate
+
+Convert between data types
+
+```{r}
+iris <- iris |> 
+  janitor::clean_names()
+
+iris |> 
+  str()
+```
+
+# Example: dplyr::mutate
+
+Convert between data types
+
+```{r}
+iris <- iris |> 
+  dplyr::mutate(species_as_chrt = as.character(species))
+```
+
+# Example: dplyr::mutate
+
+Convert between data types
+
+```{r}
+iris |> 
+  str()
+```
+
+# Example dplyr::mutate
+
+Create variable based on pre-existing variable.
+
+```{r}
+iris <- iris |> 
+  dplyr::mutate(sepal_length_2_fold = sepal_length*2)
+
+iris |> 
+  dplyr::select(sepal_length, sepal_length_2_fold) |> 
+  head()
+```
+
+# Example: dplyr::mutate
+
+Overwrite pre-existing variable
+
+```{r}
+iris |> 
+  dplyr::count(species)
+```
+
+
+# Example: dplyr::mutate
+
+Overwrite pre-existing variable
+
+```{r}
+iris <- iris |> 
+  dplyr::mutate(species = dplyr::if_else(species == "setosa", "setosa", "species_other"))
+```
+
+
+# Example: dplyr::mutate
+
+Overwrite pre-existing variable
+
+```{r}
+iris |> 
+  dplyr::count(species)
+```
+
+
+# stringr
+
+The `stringr` package is a wonderful package that has a bunch of tools that help you work with `character` strings.
+Some of my favorite functions:
+
+  - `str_replace_all` allows you to replace a substring with another substring value based on partial string matching
+  - `str_remove` similar to `str_replace_all` except it removes the string that matches the pattern.
+  
+# Example stringr_replace_all
+
+  - Specify three arguments, 1) the string to modify, 2) the string pattern to match for replacement, 3) replacement string
+
+```{r}
+x <- c("intervention_1", "intervention_2", "intervention_3")
+
+x
+
+stringr::str_replace_all(x, "intervention", "inter")
+```
+
+
+# Example stringr_replace_all
+
+  - Specify two arguments, 1) the string to modify, 2) the string pattern to match for removal
+
+```{r}
+stringr::str_remove(x, "intervention_")
+```
+
+
+# janitor
+
+`janitor` package has a bunch of useful tools to quickly tidy up the data.
+My favorite functions include,
+
+  - `clean_names` function to tidy data set variable names, sets them to `snake_case`
+  - `remove_empty` function to drop rows and/or data columns that have an entire row and/or column of missing data
+  
+# Example remove_empty
+
+  - Specify two arguments, 1) data set to modify, 2) whether to remove by rows, columns, or both (default)
+
+```{r}
+fake_data <- dplyr::tibble(
+  x = c(NA, 1, 2, 4, NA, NA)
+)
+
+fake_data
+```
+
+# Example remove_empty
+
+```{r}
+fake_data |> 
+  janitor::remove_empty(which = c("rows"))
+```
