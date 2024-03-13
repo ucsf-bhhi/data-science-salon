@@ -1,0 +1,270 @@
+---
+title: "Data visualizations with ggplot2"
+subtitle: "Data Science Salon - Session 10"
+author: "Sara Colom"
+date: "2024-03-27"
+format: 
+  revealjs:
+    echo: true
+---
+
+
+## ggplot object
+
+  - `ggplot` objects are like blank canvases you can keep adding to
+  - You can make one with the `ggplot()` function w/o any parameters
+
+```{r}
+library(ggplot2)
+
+ggplot()
+```
+
+
+## ggplot object
+
+  - You can provide `ggplot()` with global parameters (this gets inherited in subsequent additions to it)
+    - data frame to pull data from
+    - how to group the data if applicable
+      - use `color` , `fill` (and other aesthetic parameters) to color by group
+
+## ggplot object
+
+  - When a figure expects an `x` and or `y` value and the data frame is supplied you should specify these values within a wrapper `aes()`
+  - Use `+` after the end of the line to continue building your `ggplot` object
+  - e.g., `geom_point` for a scatter plot
+  
+## ggplot object
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point()
+```
+## ggplot object
+
+  - Alternatively, you can just provide the values directly by forgoing the global parameters and specifying the `x` and `y` values in the `aes()` wrapping within `geom_point()`
+    - Or whichever `geom...` add on you decide to use
+    
+## ggplot object
+  
+```{r}
+ggplot() +
+  geom_point(aes(iris$Sepal.Length, iris$Sepal.Width))
+```
+
+## ggplot object
+
+  - You can continue to add on top of the current object as well, and use `color` to change the color of the points
+  
+## ggplot object  
+
+```{r}
+ggplot() +
+  geom_point(aes(iris$Sepal.Length, iris$Sepal.Width), color = "red") +
+  geom_point(aes(iris$Petal.Length, iris$Petal.Width), color = "blue")
+```
+
+## ggplot histogram
+
+  - Before performing analysis, it's always a good idea to assess data distribution through scatterplots and histograms
+  - You can easily draw a histogram by adding `geom_histogram()` and you can use `geom_vline()` to draw a vertical line, e.g., to see more or less where the mean lies (define the `xintercept`)
+  - For `geom_histogram` you only need to specify an `x` variable
+  - With the `alpha` parameter you can specify the opacity of the graph, it ranges from 0-1
+  - `fill` is used to specify the color that fills in the graph, while color is for points and outlines
+  
+## ggplot histogram
+  
+```{r}
+ggplot(data = iris, aes(Sepal.Width)) +
+  geom_histogram(alpha = 0.5, fill = "blue", color = "green") +
+  geom_vline(xintercept = mean(iris$Sepal.Width), color = "red")
+
+```
+
+## ggplot bargraph
+
+  - To evaluate distribution of categorical variables, it is helpful to draw bargraphs showing counts of each factor level, you can do so with `geom_bar()`
+  - You need to specify here the `stat` argument indicating,
+    - if the `y` value is provided, do `stat = "identity"`
+    - if only the `x` value is provided do `stat = count`
+
+## ggplot bargraph
+
+```{r}
+species_counts <- iris |> 
+  dplyr::count(Species)
+
+species_counts
+```
+
+## ggplot bargraph
+
+
+```{r}
+species_counts |> 
+  ggplot(aes(Species, n)) +
+  geom_bar(stat = "identity")
+```
+## ggplot bargraph
+
+```{r}
+iris |> 
+  ggplot(aes(Species)) +
+  geom_bar(stat = "count")
+```
+
+## When to use aes()
+
+  - We have seen that we can inherit information from the data.frame supplied and specify values using `aes()`
+  - Sometimes we don't need to use `aes()`, e.g., to specify a point color if we want to simply give all points the same color
+  - But if we want to color by a group, this must be specified within `aes()`
+  
+## When to use aes()
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(aes(color = Species))
+```
+
+## When to use aes()
+
+What would happen if I specified `geom_point` like this,
+`geom_point(aes(color = "blue"))`?
+
+## When to use aes()
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(aes(color = "blue"))
+```
+
+## When to use aes()
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(color = "blue")
+```
+
+## Modifying points
+
+  - Aside from modifying color as we previously saw, we can modify
+    - Point size, opacity, and shape/type!
+  - _Note_ many of these modifications are applicable to other graphics e.g., lines can be different sizes, opacity, type and color
+
+## Modifying points
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(color = "blue", alpha = 0.5, shape = 5, size = 4)
+```
+
+## Modifying points
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(aes(shape = Species, color = Species), alpha = 0.5,  size = 4)
+```
+
+## Modifying points
+
+  - Moreover, you can use `scale_color_manual()` to specify a list of colors that are at least as `n` long as grouping levels specified with the `values` argument
+  - Here you can provide the Hex code wrapped by single or double quotes
+  - Likewise, this logic applies to `scale_fill_manual()`
+
+## Modifying points
+
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(aes(shape = Species, color = Species), alpha = 0.5,  size = 4) +
+  scale_color_manual(values = c("#32A03E", "#14828C", "#EACCF0"))
+```  
+
+## Modify labels
+
+  - `ylab()`
+  - `xlab()`
+  - `ggtitle()`
+  
+## Modify labels
+  
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(aes(shape = Species, color = Species), alpha = 0.5,  size = 4) +
+  xlab("Sepal Width") +
+  ylab("Sepal Length") +
+  ggtitle("Scatter Plot")
+```
+
+
+## ggplot themes
+
+  - You can customize the plot's theme with `theme()`, which allows you to specify things like,
+    - Position of x/y axis labels
+    - Position of title
+    - Color of plot background
+    - Legend position
+    - Much more!
+    
+## ggplot themes
+
+  - `theme()` accepts an input specifying the different tweaks you want to do separated by a `,`
+  - You can specify them all in a single `theme()` or do them separate and keep adding on with `+`
+  - The specifications for different plotting features are not intuitive at first
+  - I recommend googling them, and playing around, after multiple attempts, you will start to get the hang of how to specify them
+  - If you already applied a specific `theme()`, adding a different one for the same feature will overwrite the previous feature, e.g., trying to modify the title position more than once
+
+## ggplot themes
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(aes(shape = Species, color = Species), alpha = 0.5,  size = 4) +
+  xlab("Sepal Width") +
+  ylab("Sepal Length") +
+  ggtitle("Scatter Plot") +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "top"
+  )
+
+```
+
+## ggplot themes
+
+  - `ggplot2` has some nice packaged themes readily available, e.g., 
+    - `theme_bw`
+    - `theme_classic`
+  - Other packages however have a lot of nicely already ready themes too!
+
+## ggplot themes
+
+
+```{r}
+iris |> 
+  ggplot(aes(Sepal.Width, Sepal.Length)) +
+  geom_point(aes(shape = Species, color = Species), alpha = 0.5,  size = 4) +
+  xlab("Sepal Width") +
+  ylab("Sepal Length") +
+  ggtitle("Scatter Plot") +
+  theme_classic() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "top"
+  )
+```
+
+
+
+## ggplot themes
+
+For more information on customizing themes, please see, https://ggplot2-book.org/themes
